@@ -114,21 +114,59 @@ class _PlateSelectionPageState extends State<PlateSelectionPage> {
 
   Widget _buildPlateItem(PlateModel plate) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 13),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(6)),
-        width: ((Get.width / 2) - 40),
-        child: Column(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const FlutterLogo(
-              size: 60,
+            const Expanded(
+              flex: 1,
+              child: FlutterLogo(
+                size: 60,
+              ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(plate.name),
+            Expanded(
+              flex: 2,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(plate.name),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Row(
+                        children: [
+                          const Text('S/. ',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                  color: Colors.black)),
+                          Text(
+                            plate.price.toString(),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Colors.black),
+                          ),
+                        ],
+                      ),
+                      ElevatedButton(
+                        onPressed: () {},
+                        child: const Icon(
+                          Iconsax.shop_add4,
+                          color: Colors.white,
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            )
           ],
         ),
       ),
@@ -226,19 +264,38 @@ class _PlateSelectionPageState extends State<PlateSelectionPage> {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    _buildCategoriesList(),
-                    const SizedBox(
-                      height: 40,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      children: [
+                        _buildCategoriesList(),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        TextFormField(
+                          decoration: const InputDecoration(
+                              labelText: 'Buscar Plato',
+                              prefixIcon: Icon(Iconsax.search_normal)),
+                        ),
+                      ],
                     ),
-                    _buildPlatesList()
-                  ],
-                ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        _buildPlatesList()
+                      ],
+                    ),
+                  )
+                ],
               ),
             ),
           ),

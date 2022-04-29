@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:segundo_muelle/app/ui/home/pages/main_page.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:segundo_muelle/app/ui/login/pages/login_page.dart';
 import 'package:segundo_muelle/app/ui/theme/app_theme.dart';
+import 'package:segundo_muelle/main_controller.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
   runApp(const MyApp());
 }
 
@@ -12,11 +15,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(MainController());
+
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Segundo Muelle',
       theme: appThemeData,
-      home: const MainPage(),
+      home: const LoginPage(),
     );
   }
 }
