@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:segundo_muelle/app/ui/admin/pages/table_crud_page.dart';
+import 'package:segundo_muelle/app/ui/admin/pages/user_crud_page.dart';
 import 'package:segundo_muelle/app/ui/login/pages/login_page.dart';
 
 class OptionSelectionPage extends StatefulWidget {
@@ -116,7 +117,7 @@ class _OptionSelectionPageState extends State<OptionSelectionPage> {
                     _buildItem(
                       iconData: Iconsax.user,
                       title: 'Editar usuarios',
-                      onTap: () => Navigator.pushNamed(context, '/users'),
+                      onTap: () => Get.to(() => const UserCrudPage()),
                     ),
                   ],
                 ),
