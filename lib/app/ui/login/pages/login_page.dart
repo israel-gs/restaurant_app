@@ -29,6 +29,7 @@ class LoginPage extends StatelessWidget {
                     height: 50,
                   ),
                   TextFormField(
+                    controller: _loginController.userController,
                     decoration: const InputDecoration(labelText: 'Usuario'),
                     validator: _loginController.validateUser,
                   ),
@@ -36,6 +37,7 @@ class LoginPage extends StatelessWidget {
                     height: 20,
                   ),
                   TextFormField(
+                    controller: _loginController.passwordController,
                     decoration: const InputDecoration(labelText: 'Contraseña'),
                     validator: _loginController.validatePassword,
                   ),

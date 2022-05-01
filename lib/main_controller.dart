@@ -12,10 +12,17 @@ class MainController extends GetxController {
   @override
   onInit() async {
     super.onInit();
+    registerAdapters();
+    await registerBoxes();
+  }
+
+  registerAdapters() {
     Hive.registerAdapter(TableModelAdapter());
     Hive.registerAdapter(UserModelAdapter());
     Hive.registerAdapter(PlateModelAdapter());
+  }
 
+  registerBoxes() async {
     tableBox = await Hive.openBox<TableModel>('tableBox');
     plateBox = await Hive.openBox<PlateModel>('plateBox');
     userBox = await Hive.openBox<UserModel>('userBox');
