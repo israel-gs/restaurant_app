@@ -9,6 +9,15 @@ class MainController extends GetxController {
   late Box<UserModel> userBox;
   late Box<PlateModel> plateBox;
 
+  var currentUser = UserModel(
+    username: '',
+    name: '',
+    password: '',
+    isAdmin: false,
+    isBlocked: false,
+    attemptsCount: 0,
+  ).obs;
+
   @override
   onInit() async {
     super.onInit();

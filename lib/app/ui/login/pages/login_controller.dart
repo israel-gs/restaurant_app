@@ -1,9 +1,14 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:segundo_muelle/app/data/models/user_model.dart';
 import 'package:segundo_muelle/app/ui/admin/pages/admin_dashboard_page.dart';
 import 'package:segundo_muelle/app/ui/home/pages/main_page.dart';
+import 'package:segundo_muelle/main_controller.dart';
 
 class LoginController extends GetxController {
+  final MainController _mainController = Get.find();
   final loginFormKey = GlobalKey<FormState>();
   final userController = TextEditingController();
   final passwordController = TextEditingController();
@@ -31,23 +36,81 @@ class LoginController extends GetxController {
 
   onContinue() {
     if (loginFormKey.currentState!.validate()) {
-      print(userController.text);
-      print(passwordController.text);
-
       if (userController.text == 'admin' &&
           passwordController.text == 'admin') {
         userController.clear();
         passwordController.clear();
         Get.offAll(() => const AdminDashboardPage());
-        // todo: implementar el login de admin
-        // todo: implementar el login de usuario
-        // todo: implementar dashboard del admin
-        // todo: implementar crud usuario
         // todo: implementar crud plato
-        // todo: implementar crud mesa
         // todo: crear tipo para los pedidos de la mesa (array de platos)
       } else {
-        Get.offAll(() => const MainPage());
+        _mainController.userBox.values.toList().forEach((user) {
+          if (user.username == userController.text) {
+            if (user.password == passwordController.text && !user.isBlocked) {
+              if (user.isAdmin) {
+                userController.clear();
+                passwordController.clear();
+                Get.offAll(() => const AdminDashboardPage());
+              } else {
+                userController.clear();
+                passwordController.clear();
+                Get.offAll(() => const MainPage());
+              }
+            } else {
+              if (user.attemptsCount >= 3) {
+                int index =
+                    _mainController.userBox.values.toList().indexOf(user);
+                UserModel newUser = UserModel(
+                  name: user.name,
+                  username: user.username,
+                  password: user.password,
+                  isAdmin: user.isAdmin,
+                  isBlocked: true,
+                  attemptsCount: user.attemptsCount + 1,
+                );
+                _mainController.userBox.putAt(index, newUser);
+                Get.snackbar(
+                  'Error',
+                  'Su usuario ha sido bloqueado por 3 intentos fallidos',
+                  colorText: Colors.white,
+                  margin: const EdgeInsets.all(10),
+                  icon: const Icon(
+                    Iconsax.close_circle,
+                    color: Colors.white,
+                  ),
+                  backgroundColor: Colors.red,
+                  snackPosition: SnackPosition.BOTTOM,
+                  duration: const Duration(seconds: 2),
+                );
+              } else {
+                int index =
+                    _mainController.userBox.values.toList().indexOf(user);
+                UserModel newUser = UserModel(
+                  name: user.name,
+                  username: user.username,
+                  password: user.password,
+                  isAdmin: user.isAdmin,
+                  isBlocked: user.isBlocked,
+                  attemptsCount: user.attemptsCount + 1,
+                );
+                _mainController.userBox.putAt(index, newUser);
+                Get.snackbar(
+                  'Error',
+                  'Contraseña incorrecta',
+                  colorText: Colors.white,
+                  margin: const EdgeInsets.all(10),
+                  icon: const Icon(
+                    Iconsax.close_circle,
+                    color: Colors.white,
+                  ),
+                  backgroundColor: Colors.red,
+                  snackPosition: SnackPosition.BOTTOM,
+                  duration: const Duration(seconds: 2),
+                );
+              }
+            }
+          }
+        });
       }
     }
   }

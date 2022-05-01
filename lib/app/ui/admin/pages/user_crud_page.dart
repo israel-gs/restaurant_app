@@ -92,6 +92,31 @@ class _UserCrudPageState extends State<UserCrudPage> {
                         ),
                       ],
                     ),
+                    Row(
+                      children: [
+                        Text(
+                          user.isAdmin ? 'Administrador' : 'Mesero',
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black54,
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (user.isBlocked)
+                      Row(
+                        children: const [
+                          Text(
+                            'Usuario bloqueado',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               ),

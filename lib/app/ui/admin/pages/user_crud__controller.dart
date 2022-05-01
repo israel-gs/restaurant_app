@@ -15,12 +15,16 @@ class UserCrudController extends GetxController {
       TextEditingController();
   final TextEditingController addPasswordTextController =
       TextEditingController();
+  var addUserIsBlocked = false.obs;
+  var addUserIsAdmin = false.obs;
 
   final TextEditingController editNameTextController = TextEditingController();
   final TextEditingController editUsernameTextController =
       TextEditingController();
   final TextEditingController editPasswordTextController =
       TextEditingController();
+  var editUserIsBlocked = false.obs;
+  var editUserIsAdmin = false.obs;
 
   @override
   void onInit() {
@@ -78,33 +82,63 @@ class UserCrudController extends GetxController {
         denyButtonText: 'Cancelar',
         title: 'Añadir usuario',
         subtitle: '',
-        subtitleContent: Form(
-          key: formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                controller: addNameTextController,
-                decoration:
-                    const InputDecoration(labelText: 'Nombre y Apeliido'),
-                validator: _validateTewTableNameTextController,
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: addUsernameTextController,
-                decoration:
-                    const InputDecoration(labelText: 'Nombre de usuario'),
-                validator: _validateTewTableNameTextController,
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: addPasswordTextController,
-                decoration: const InputDecoration(labelText: 'Contraseña'),
-                validator: _validateTewTableNameTextController,
-              ),
-            ],
-          ),
-        ),
+        subtitleContent: Obx(() {
+          return Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: addNameTextController,
+                  decoration:
+                      const InputDecoration(labelText: 'Nombre y Apeliido'),
+                  validator: _validateTewTableNameTextController,
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: addUsernameTextController,
+                  decoration:
+                      const InputDecoration(labelText: 'Nombre de usuario'),
+                  validator: _validateTewTableNameTextController,
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: addPasswordTextController,
+                  decoration: const InputDecoration(labelText: 'Contraseña'),
+                  validator: _validateTewTableNameTextController,
+                ),
+                const SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Bloqueado: '),
+                    Switch(
+                      value: addUserIsBlocked.value,
+                      onChanged: (value) {
+                        addUserIsBlocked(value);
+                        update();
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Administrador: '),
+                    Switch(
+                      value: addUserIsAdmin.value,
+                      onChanged: (value) {
+                        addUserIsAdmin(value);
+                        update();
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        }),
         onDeny: () {
           Get.back();
           formKey.currentState?.reset();
@@ -112,10 +146,16 @@ class UserCrudController extends GetxController {
         onAccept: () {
           if (formKey.currentState!.validate()) {
             _mainController.userBox.add(UserModel(
-                name: addNameTextController.text,
-                password: addPasswordTextController.text,
-                username: addUsernameTextController.text));
+              name: addNameTextController.text,
+              password: addPasswordTextController.text,
+              username: addUsernameTextController.text,
+              isAdmin: addUserIsAdmin.value,
+              isBlocked: addUserIsBlocked.value,
+              attemptsCount: 0,
+            ));
             formKey.currentState?.reset();
+            addUserIsBlocked(false);
+            addUserIsAdmin(false);
             users.clear();
             users.addAll(_mainController.userBox.values.toList());
             update();
@@ -135,6 +175,8 @@ class UserCrudController extends GetxController {
     editNameTextController.text = user.name;
     editUsernameTextController.text = user.username;
     editPasswordTextController.text = user.password;
+    editUserIsBlocked(user.isBlocked);
+    editUserIsAdmin(user.isAdmin);
     await showDialog(
       context: Get.context!,
       builder: (_) => ConfirmationDialog(
@@ -142,33 +184,63 @@ class UserCrudController extends GetxController {
         denyButtonText: 'Cancelar',
         title: 'Editar Usuario',
         subtitle: '',
-        subtitleContent: Form(
-          key: formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                controller: editNameTextController,
-                decoration:
-                    const InputDecoration(labelText: 'Apellido y Nombre'),
-                validator: _validateTewTableNameTextController,
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: editUsernameTextController,
-                decoration:
-                    const InputDecoration(labelText: 'Nombre de usuario'),
-                validator: _validateTewTableNameTextController,
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: editPasswordTextController,
-                decoration: const InputDecoration(labelText: 'Contraseña'),
-                validator: _validateTewTableNameTextController,
-              ),
-            ],
-          ),
-        ),
+        subtitleContent: Obx(() {
+          return Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: editNameTextController,
+                  decoration:
+                      const InputDecoration(labelText: 'Apellido y Nombre'),
+                  validator: _validateTewTableNameTextController,
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: editUsernameTextController,
+                  decoration:
+                      const InputDecoration(labelText: 'Nombre de usuario'),
+                  validator: _validateTewTableNameTextController,
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: editPasswordTextController,
+                  decoration: const InputDecoration(labelText: 'Contraseña'),
+                  validator: _validateTewTableNameTextController,
+                ),
+                const SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Bloqueado: '),
+                    Switch(
+                      value: editUserIsBlocked.value,
+                      onChanged: (value) {
+                        editUserIsBlocked(value);
+                        update();
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Administrador: '),
+                    Switch(
+                      value: editUserIsAdmin.value,
+                      onChanged: (value) {
+                        editUserIsAdmin(value);
+                        update();
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        }),
         onDeny: () {
           Get.back();
           formKey.currentState?.reset();
@@ -178,9 +250,15 @@ class UserCrudController extends GetxController {
             _mainController.userBox.putAt(
                 index,
                 UserModel(
-                    name: editNameTextController.text,
-                    password: editPasswordTextController.text,
-                    username: editUsernameTextController.text));
+                  name: editNameTextController.text,
+                  password: editPasswordTextController.text,
+                  username: editUsernameTextController.text,
+                  isBlocked: editUserIsBlocked.value,
+                  isAdmin: editUserIsAdmin.value,
+                  attemptsCount: user.isBlocked != editUserIsBlocked.value
+                      ? 0
+                      : user.attemptsCount,
+                ));
             formKey.currentState?.reset();
             users.clear();
             users.addAll(_mainController.userBox.values.toList());

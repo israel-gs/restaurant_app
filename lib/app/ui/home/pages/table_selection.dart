@@ -3,6 +3,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:segundo_muelle/app/ui/home/pages/plate_selection_page.dart';
+import 'package:segundo_muelle/app/ui/home/pages/table_selection_controller.dart';
+import 'package:segundo_muelle/app/ui/login/pages/login_page.dart';
+import 'package:segundo_muelle/main_controller.dart';
 
 class TableSelectionPage extends StatefulWidget {
   const TableSelectionPage({Key? key}) : super(key: key);
@@ -12,6 +15,10 @@ class TableSelectionPage extends StatefulWidget {
 }
 
 class _TableSelectionPageState extends State<TableSelectionPage> {
+  final MainController _mainController = Get.find();
+  final TableSelectionController _tableSelectionController =
+      Get.put(TableSelectionController());
+
   var tables = [
     [1, 2],
     [3, 4],
@@ -21,29 +28,27 @@ class _TableSelectionPageState extends State<TableSelectionPage> {
   ];
 
   _buildTableItem(String name) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 20),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(6),
-          child: Material(
-            color: Colors.white,
-            child: InkWell(
-              onTap: () {
-                Get.to(PlateSelectionPage());
-              },
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                child: Column(
-                  children: [
-                    SvgPicture.asset('lib/app/assets/table_icon.svg'),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(name)
-                  ],
-                ),
+    return Container(
+      width: (Get.width - 60) / 2,
+      padding: const EdgeInsets.only(bottom: 20),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(6),
+        child: Material(
+          color: Colors.white,
+          child: InkWell(
+            onTap: () {
+              Get.to(PlateSelectionPage());
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+              child: Column(
+                children: [
+                  SvgPicture.asset('lib/app/assets/table_icon.svg'),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(name)
+                ],
               ),
             ),
           ),
@@ -66,16 +71,18 @@ class _TableSelectionPageState extends State<TableSelectionPage> {
       ),
       actions: [
         IconButton(
-          onPressed: () {},
-          icon: const Icon(Iconsax.menu),
+          onPressed: () {
+            Get.offAll(() => const LoginPage());
+          },
+          icon: const Icon(Iconsax.logout),
         )
       ],
       title: Row(
-        children: const [
-          Text('Hola '),
+        children: [
+          const Text('Hola '),
           Text(
-            'Israel',
-            style: TextStyle(fontWeight: FontWeight.bold),
+            _mainController.currentUser.value.name,
+            style: const TextStyle(fontWeight: FontWeight.bold),
           )
         ],
       ),
@@ -93,7 +100,8 @@ class _TableSelectionPageState extends State<TableSelectionPage> {
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 90),
+                padding: const EdgeInsets.only(
+                    left: 20, right: 20, top: 20, bottom: 90),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -101,17 +109,14 @@ class _TableSelectionPageState extends State<TableSelectionPage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    ...tables
-                        .map((e) => Row(
-                              children: [
-                                _buildTableItem('Mesa ${e[0]}'),
-                                const SizedBox(
-                                  width: 20,
-                                ),
-                                _buildTableItem('Mesa ${e[1]}'),
-                              ],
-                            ))
-                        .toList(),
+                    Wrap(
+                      spacing: 20,
+                      children: [
+                        ..._tableSelectionController.tables
+                            .map((e) => _buildTableItem(e.name))
+                            .toList(),
+                      ],
+                    )
                   ],
                 ),
               ),
