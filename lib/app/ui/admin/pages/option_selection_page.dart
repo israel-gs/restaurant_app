@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:segundo_muelle/app/ui/admin/pages/plate_crud_page.dart';
 import 'package:segundo_muelle/app/ui/admin/pages/table_crud_page.dart';
 import 'package:segundo_muelle/app/ui/admin/pages/user_crud_page.dart';
 import 'package:segundo_muelle/app/ui/login/pages/login_page.dart';
@@ -111,7 +112,7 @@ class _OptionSelectionPageState extends State<OptionSelectionPage> {
                     _buildItem(
                       iconData: Iconsax.cd,
                       title: 'Editar platos',
-                      onTap: () => Navigator.pushNamed(context, '/edit'),
+                      onTap: () => Get.to(() => PlateCrudPage()),
                     ),
                     const SizedBox(height: 20),
                     _buildItem(

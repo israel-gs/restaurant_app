@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:segundo_muelle/app/data/models/user_model.dart';
 import 'package:segundo_muelle/app/ui/theme/color_theme.dart';
 import 'package:segundo_muelle/app/widgets/dialogs/confirmation_dialog.dart';
+import 'package:segundo_muelle/core/utils/alert_utils.dart';
 import 'package:segundo_muelle/main_controller.dart';
 
 class UserCrudController extends GetxController {
@@ -57,11 +58,7 @@ class UserCrudController extends GetxController {
           users.addAll(_mainController.userBox.values.toList());
           update();
           Get.back();
-          Get.showSnackbar(const GetSnackBar(
-            duration: Duration(seconds: 2),
-            message: 'El usuario se eliminó correctamente',
-            backgroundColor: ColorTheme.primary,
-          ));
+          AlertUtils.showSuccess('El usuario se eliminó correctamente');
         },
       ),
     );
@@ -160,11 +157,7 @@ class UserCrudController extends GetxController {
             users.addAll(_mainController.userBox.values.toList());
             update();
             Get.back();
-            Get.showSnackbar(const GetSnackBar(
-              duration: Duration(seconds: 2),
-              message: 'Usuario creado correctamente',
-              backgroundColor: ColorTheme.primary,
-            ));
+            AlertUtils.showSuccess('Usuario creado correctamente');
           }
         },
       ),
@@ -264,11 +257,7 @@ class UserCrudController extends GetxController {
             users.addAll(_mainController.userBox.values.toList());
             update();
             Get.back();
-            Get.showSnackbar(const GetSnackBar(
-              duration: Duration(seconds: 2),
-              message: 'El usuario se editó correctamente',
-              backgroundColor: ColorTheme.primary,
-            ));
+            AlertUtils.showSuccess('El usuario se editó correctamente');
           }
         },
       ),

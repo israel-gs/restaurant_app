@@ -20,8 +20,8 @@ class PlateModelAdapter extends TypeAdapter<PlateModel> {
       name: fields[0] as String,
       price: fields[1] as double,
       description: fields[2] as String,
-      image: fields[3] as String,
-      category: fields[4] as String,
+      code: fields[3] as String,
+      category: fields[4] as CategoryEnum,
     );
   }
 
@@ -36,7 +36,7 @@ class PlateModelAdapter extends TypeAdapter<PlateModel> {
       ..writeByte(2)
       ..write(obj.description)
       ..writeByte(3)
-      ..write(obj.image)
+      ..write(obj.code)
       ..writeByte(4)
       ..write(obj.category);
   }

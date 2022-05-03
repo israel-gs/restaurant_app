@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
-import 'package:segundo_muelle/app/ui/home/pages/table_selection.dart';
+import 'package:segundo_muelle/app/ui/home/pages/table_selection_page.dart';
 import 'package:segundo_muelle/app/ui/login/pages/login_page.dart';
 import 'package:segundo_muelle/app/ui/theme/app_theme.dart';
 

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:segundo_muelle/app/data/models/table_model.dart';
 import 'package:segundo_muelle/app/ui/theme/color_theme.dart';
 import 'package:segundo_muelle/app/widgets/dialogs/confirmation_dialog.dart';
+import 'package:segundo_muelle/core/utils/alert_utils.dart';
 import 'package:segundo_muelle/main_controller.dart';
 
 class TableCrudController extends GetxController {
@@ -47,11 +48,7 @@ class TableCrudController extends GetxController {
           tables.addAll(_mainController.tableBox.values.toList());
           update();
           Get.back();
-          Get.showSnackbar(const GetSnackBar(
-            duration: Duration(seconds: 2),
-            message: 'La mesa se eliminó correctamente',
-            backgroundColor: ColorTheme.primary,
-          ));
+          AlertUtils.showSuccess('La mesa se eliminó correctamente');
         },
       ),
     );
@@ -93,11 +90,7 @@ class TableCrudController extends GetxController {
             tables.addAll(_mainController.tableBox.values.toList());
             update();
             Get.back();
-            Get.showSnackbar(const GetSnackBar(
-              duration: Duration(seconds: 2),
-              message: 'Mesa agregada correctamente',
-              backgroundColor: ColorTheme.primary,
-            ));
+            AlertUtils.showSuccess('Mesa agregada correctamente');
           }
         },
       ),
@@ -136,11 +129,7 @@ class TableCrudController extends GetxController {
             tables.addAll(_mainController.tableBox.values.toList());
             update();
             Get.back();
-            Get.showSnackbar(const GetSnackBar(
-              duration: Duration(seconds: 2),
-              message: 'La mesa se editó correctamente',
-              backgroundColor: ColorTheme.primary,
-            ));
+            AlertUtils.showSuccess('La mesa se editó correctamente');
           }
         },
       ),

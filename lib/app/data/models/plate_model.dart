@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import '../enums/category_enum.dart';
 
 part 'plate_model.g.dart';
 
@@ -6,19 +7,23 @@ part 'plate_model.g.dart';
 class PlateModel extends HiveObject {
   @HiveField(0)
   String name;
+
   @HiveField(1)
   double price;
+
   @HiveField(2)
   String description;
+
   @HiveField(3)
-  String image;
+  String code;
+
   @HiveField(4)
-  String category;
+  CategoryEnum category;
 
   PlateModel(
       {required this.name,
       required this.price,
       required this.description,
-      required this.image,
+      required this.code,
       required this.category});
 }

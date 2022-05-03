@@ -5,6 +5,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:segundo_muelle/app/data/models/user_model.dart';
 import 'package:segundo_muelle/app/ui/admin/pages/admin_dashboard_page.dart';
 import 'package:segundo_muelle/app/ui/home/pages/main_page.dart';
+import 'package:segundo_muelle/core/utils/alert_utils.dart';
 import 'package:segundo_muelle/main_controller.dart';
 
 class LoginController extends GetxController {
@@ -47,6 +48,7 @@ class LoginController extends GetxController {
         _mainController.userBox.values.toList().forEach((user) {
           if (user.username == userController.text) {
             if (user.password == passwordController.text && !user.isBlocked) {
+              _mainController.currentUser(user);
               if (user.isAdmin) {
                 userController.clear();
                 passwordController.clear();
@@ -69,19 +71,8 @@ class LoginController extends GetxController {
                   attemptsCount: user.attemptsCount + 1,
                 );
                 _mainController.userBox.putAt(index, newUser);
-                Get.snackbar(
-                  'Error',
-                  'Su usuario ha sido bloqueado por 3 intentos fallidos',
-                  colorText: Colors.white,
-                  margin: const EdgeInsets.all(10),
-                  icon: const Icon(
-                    Iconsax.close_circle,
-                    color: Colors.white,
-                  ),
-                  backgroundColor: Colors.red,
-                  snackPosition: SnackPosition.BOTTOM,
-                  duration: const Duration(seconds: 2),
-                );
+                AlertUtils.showError(
+                    'Su usuario ha sido bloqueado por 3 intentos fallidos');
               } else {
                 int index =
                     _mainController.userBox.values.toList().indexOf(user);
@@ -94,19 +85,7 @@ class LoginController extends GetxController {
                   attemptsCount: user.attemptsCount + 1,
                 );
                 _mainController.userBox.putAt(index, newUser);
-                Get.snackbar(
-                  'Error',
-                  'Contraseña incorrecta',
-                  colorText: Colors.white,
-                  margin: const EdgeInsets.all(10),
-                  icon: const Icon(
-                    Iconsax.close_circle,
-                    color: Colors.white,
-                  ),
-                  backgroundColor: Colors.red,
-                  snackPosition: SnackPosition.BOTTOM,
-                  duration: const Duration(seconds: 2),
-                );
+                AlertUtils.showError('Contraseña incorrecta');
               }
             }
           }

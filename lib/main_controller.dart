@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:segundo_muelle/app/data/enums/category_enum.dart';
 import 'package:segundo_muelle/app/data/models/plate_model.dart';
 import 'package:segundo_muelle/app/data/models/table_model.dart';
 import 'package:segundo_muelle/app/data/models/user_model.dart';
@@ -29,6 +30,7 @@ class MainController extends GetxController {
     Hive.registerAdapter(TableModelAdapter());
     Hive.registerAdapter(UserModelAdapter());
     Hive.registerAdapter(PlateModelAdapter());
+    Hive.registerAdapter(CategoryEnumAdapter());
   }
 
   registerBoxes() async {
