@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:segundo_muelle/app/ui/admin/pages/plate_crud_page.dart';
-import 'package:segundo_muelle/app/ui/admin/pages/table_crud_page.dart';
-import 'package:segundo_muelle/app/ui/admin/pages/user_crud_page.dart';
+import 'package:segundo_muelle/app/ui/admin/pages/plate_crud/plate_crud_page.dart';
+import 'package:segundo_muelle/app/ui/admin/pages/table_crud/table_crud_page.dart';
+import 'package:segundo_muelle/app/ui/admin/pages/user_crud/user_crud_page.dart';
 import 'package:segundo_muelle/app/ui/login/pages/login_page.dart';
 
 class OptionSelectionPage extends StatefulWidget {

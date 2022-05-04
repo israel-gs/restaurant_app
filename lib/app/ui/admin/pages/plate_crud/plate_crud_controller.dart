@@ -42,8 +42,14 @@ class PlateCrudController extends GetxController {
   void onInit() {
     plates.addAll(_mainController.plateBox.values.toList());
     addCategoryItems();
+    selectAllCategories();
     update();
     super.onInit();
+  }
+
+  selectAllCategories() {
+    selectedCategories.clear();
+    selectedCategories.addAll(CategoryEnum.values);
   }
 
   addCategoryItems() {
@@ -55,77 +61,22 @@ class PlateCrudController extends GetxController {
     }
   }
 
-  onAddNewPlate() async {
-    await showDialog(
-      context: Get.context!,
-      builder: (_) => ConfirmationDialog(
-        acceptButtonText: 'Añadir',
-        denyButtonText: 'Cancelar',
-        title: 'Agregar Plato',
-        subtitle: '',
-        subtitleContent: Obx(() {
-          return SingleChildScrollView(
-            child: Form(
-              key: formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextFormField(
-                    controller: addCodeTextController,
-                    decoration: const InputDecoration(labelText: 'Código'),
-                    // validator: _validateTewTableNameTextController,
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    controller: addNameTextController,
-                    decoration:
-                        const InputDecoration(labelText: 'Nombre del Plato'),
-                    // validator: _validateTewTableNameTextController,
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    controller: addPriceTextController,
-                    decoration: const InputDecoration(labelText: 'Precio'),
-                    // validator: _validateTewTableNameTextController,
-                  ),
-                  const SizedBox(height: 10),
-                  DropdownButtonFormField<CategoryEnum>(
-                    decoration: const InputDecoration(labelText: 'Categoría'),
-                    isExpanded: true,
-                    value: selectedCategory.value,
-                    items: categoryDropdownMenuItems,
-                    onChanged: (CategoryEnum? value) {
-                      selectedCategory(value);
-                      update();
-                    },
-                  )
-                ],
-              ),
-            ),
-          );
-        }),
-        onDeny: () {
-          Get.back();
-          formKey.currentState?.reset();
-        },
-        onAccept: () {
-          if (formKey.currentState!.validate()) {
-            _mainController.plateBox.add(PlateModel(
-                name: addNameTextController.text,
-                price: double.parse(addPriceTextController.text),
-                description: '',
-                code: addCodeTextController.text,
-                category: selectedCategory.value));
-            formKey.currentState?.reset();
-            plates.clear();
-            plates.addAll(_mainController.plateBox.values.toList());
-            update();
-            Get.back();
-            AlertUtils.showSuccess('Plato agregado correctamente');
-          }
-        },
-      ),
-    );
+  onAcceptAddPlate() {
+    if (formKey.currentState!.validate()) {
+      _mainController.plateBox.add(PlateModel(
+          name: addNameTextController.text,
+          price: double.parse(addPriceTextController.text),
+          description: '',
+          code: addCodeTextController.text,
+          category: selectedCategory.value));
+      formKey.currentState?.reset();
+      plates.clear();
+      plates.addAll(_mainController.plateBox.values.toList());
+      selectAllCategories();
+      update();
+      Get.back();
+      AlertUtils.showSuccess('Plato agregado correctamente');
+    }
   }
 
   onAcceptDelete(int index) async {

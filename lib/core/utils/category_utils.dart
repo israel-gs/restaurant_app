@@ -17,4 +17,21 @@ class CategoryUtils {
         return "";
     }
   }
+
+  static String getCategoryImagePath(CategoryEnum categoryEnum) {
+    switch (categoryEnum) {
+      case CategoryEnum.starterDish:
+        return "lib/app/assets/entrada.png";
+      case CategoryEnum.fish:
+        return "lib/app/assets/pescados.png";
+      case CategoryEnum.soups:
+        return "lib/app/assets/sopas.png";
+      case CategoryEnum.drinks:
+        return "lib/app/assets/bebidas.png";
+      case CategoryEnum.desserts:
+        return "lib/app/assets/postres.png";
+      default:
+        return "";
+    }
+  }
 }

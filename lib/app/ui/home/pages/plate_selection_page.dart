@@ -3,16 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:segundo_muelle/app/data/enums/category_enum.dart';
+import 'package:segundo_muelle/app/data/models/plate_model.dart';
+import 'package:segundo_muelle/app/ui/home/pages/plate_selection_controller.dart';
 import 'package:segundo_muelle/app/ui/theme/color_theme.dart';
-
-class PlateModel {
-  String name;
-  String imagePath;
-  double price;
-
-  PlateModel(
-      {required this.name, required this.imagePath, required this.price});
-}
+import 'package:segundo_muelle/core/utils/category_utils.dart';
 
 class CategoryModel {
   String name;
@@ -31,46 +26,8 @@ class PlateSelectionPage extends StatefulWidget {
 }
 
 class _PlateSelectionPageState extends State<PlateSelectionPage> {
-  final List<CategoryModel> _categories = [
-    CategoryModel(
-        name: 'Entradas',
-        imagePath: 'lib/app/assets/entrada.png',
-        plates: [
-          PlateModel(name: 'Plato 1', imagePath: '', price: 25.00),
-          PlateModel(name: 'Plato 1', imagePath: '', price: 25.00),
-          PlateModel(name: 'Plato 1', imagePath: '', price: 25.00),
-          PlateModel(name: 'Plato 1', imagePath: '', price: 25.00),
-          PlateModel(name: 'Plato 1', imagePath: '', price: 25.00),
-          PlateModel(name: 'Plato 1', imagePath: '', price: 25.00),
-          PlateModel(name: 'Plato 1', imagePath: '', price: 25.00),
-          PlateModel(name: 'Plato 1', imagePath: '', price: 25.00),
-          PlateModel(name: 'Plato 1', imagePath: '', price: 25.00),
-          PlateModel(name: 'Plato 1', imagePath: '', price: 25.00),
-          PlateModel(name: 'Plato 1', imagePath: '', price: 25.00),
-          PlateModel(name: 'Plato 1', imagePath: '', price: 25.00),
-          PlateModel(name: 'Plato 1', imagePath: '', price: 25.00),
-          PlateModel(name: 'Plato 1', imagePath: '', price: 25.00),
-          PlateModel(name: 'Plato 1', imagePath: '', price: 25.00),
-          PlateModel(name: 'Plato 1', imagePath: '', price: 25.00),
-          PlateModel(name: 'Plato 1', imagePath: '', price: 25.00),
-          PlateModel(name: 'Plato 1', imagePath: '', price: 25.00),
-          PlateModel(name: 'Plato 1', imagePath: '', price: 25.00),
-          PlateModel(name: 'Plato 1', imagePath: '', price: 25.00),
-          PlateModel(name: 'Plato 1', imagePath: '', price: 25.00),
-          PlateModel(name: 'Plato 1', imagePath: '', price: 25.00),
-          PlateModel(name: 'Plato 1', imagePath: '', price: 25.00),
-        ]),
-    CategoryModel(
-        name: 'Pescados', imagePath: 'lib/app/assets/pescados.png', plates: []),
-    CategoryModel(
-        name: 'Sopas', imagePath: 'lib/app/assets/sopas.png', plates: []),
-    CategoryModel(
-        name: 'Bebidas', imagePath: 'lib/app/assets/bebidas.png', plates: []),
-    CategoryModel(
-        name: 'Postres', imagePath: 'lib/app/assets/postres.png', plates: []),
-  ];
-
-  late CategoryModel selectedCategory;
+  final PlateSelectionController _plateSelectionController =
+      Get.put(PlateSelectionController());
 
   AppBar _buildAppBar() {
     return AppBar(
@@ -147,7 +104,7 @@ class _PlateSelectionPageState extends State<PlateSelectionPage> {
                                   fontSize: 12,
                                   color: Colors.black)),
                           Text(
-                            plate.price.toString(),
+                            plate.price.toStringAsFixed(2),
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
@@ -173,7 +130,9 @@ class _PlateSelectionPageState extends State<PlateSelectionPage> {
     );
   }
 
-  Widget _buildCategoryItem(CategoryModel category) {
+  Widget _buildCategoryItem(CategoryEnum category) {
+    bool isSelected =
+        category == _plateSelectionController.selectedCategory.value;
     return Padding(
       padding: const EdgeInsets.only(right: 20),
       child: ClipRRect(
@@ -182,32 +141,28 @@ class _PlateSelectionPageState extends State<PlateSelectionPage> {
           child: InkWell(
             onTap: () {
               setState(() {
-                selectedCategory = category;
+                _plateSelectionController.selectedCategory(category);
               });
             },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 150),
-              color: category == selectedCategory
-                  ? ColorTheme.primary
-                  : Colors.white,
+              color: isSelected ? ColorTheme.primary : Colors.white,
               width: 95,
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
               child: Column(
                 children: [
-                  Image.asset(category.imagePath, height: 40),
+                  Image.asset(CategoryUtils.getCategoryImagePath(category),
+                      height: 40),
                   const SizedBox(
                     height: 10,
                   ),
                   Text(
-                    category.name,
+                    CategoryUtils.getCategoryTypeString(category),
                     style: TextStyle(
                         fontSize: 10,
-                        fontWeight: (category == selectedCategory)
-                            ? FontWeight.bold
-                            : FontWeight.normal,
-                        color: (category == selectedCategory)
-                            ? Colors.white
-                            : Colors.black),
+                        fontWeight:
+                            (isSelected) ? FontWeight.bold : FontWeight.normal,
+                        color: (isSelected) ? Colors.white : Colors.black),
                   )
                 ],
               ),
@@ -221,7 +176,8 @@ class _PlateSelectionPageState extends State<PlateSelectionPage> {
   Widget _buildPlatesList() {
     return SingleChildScrollView(
       child: Wrap(
-        children: selectedCategory.plates
+        children: _plateSelectionController.plates
+            .where(filterPlates)
             .map(
               (plate) => _buildPlateItem(plate),
             )
@@ -235,17 +191,21 @@ class _PlateSelectionPageState extends State<PlateSelectionPage> {
       height: 100,
       child: ListView(
         scrollDirection: Axis.horizontal,
-        children: _categories
+        children: CategoryEnum.values
             .map((category) => _buildCategoryItem(category))
             .toList(),
       ),
     );
   }
 
+  bool filterPlates(PlateModel plate) {
+    return (_plateSelectionController.selectedCategory.value == plate.category);
+  }
+
   @override
   void initState() {
     setState(() {
-      selectedCategory = _categories[0];
+      // selectedCategory = _categories[0];
     });
     super.initState();
   }

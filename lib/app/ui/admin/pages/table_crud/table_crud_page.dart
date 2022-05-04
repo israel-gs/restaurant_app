@@ -3,7 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:segundo_muelle/app/data/models/table_model.dart';
-import 'package:segundo_muelle/app/ui/admin/pages/table_crud__controller.dart';
+import 'package:segundo_muelle/app/ui/admin/pages/table_crud/table_crud__controller.dart';
 import 'package:segundo_muelle/app/widgets/slidable_item.dart';
 
 class TableCrudPage extends StatefulWidget {

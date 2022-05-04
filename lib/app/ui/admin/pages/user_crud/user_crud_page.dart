@@ -3,7 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:segundo_muelle/app/data/models/user_model.dart';
-import 'package:segundo_muelle/app/ui/admin/pages/user_crud__controller.dart';
+import 'package:segundo_muelle/app/ui/admin/pages/user_crud/user_crud__controller.dart';
 import 'package:segundo_muelle/app/widgets/slidable_item.dart';
 
 class UserCrudPage extends StatefulWidget {
