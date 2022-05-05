@@ -7,15 +7,6 @@ import 'package:segundo_muelle/app/ui/waiter/pages/plate_selection/plate_selecti
 import 'package:segundo_muelle/app/ui/theme/color_theme.dart';
 import 'package:segundo_muelle/core/utils/category_utils.dart';
 
-class CategoryModel {
-  String name;
-  String imagePath;
-  List<PlateModel> plates;
-
-  CategoryModel(
-      {required this.name, required this.imagePath, required this.plates});
-}
-
 class PlateSelectionPage extends StatefulWidget {
   const PlateSelectionPage({Key? key}) : super(key: key);
 
@@ -77,51 +68,46 @@ class _PlateSelectionPageState extends State<PlateSelectionPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Expanded(
-              flex: 1,
-              child: FlutterLogo(
-                size: 60,
-              ),
-            ),
             Expanded(
               flex: 2,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text(plate.code, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const SizedBox(width: 10),
                   Text(plate.name),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Row(
-                        children: [
-                          const Text('S/. ',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
-                                  color: Colors.black)),
-                          Text(
-                            plate.price.toStringAsFixed(2),
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                                color: Colors.black),
-                          ),
-                        ],
+                      const Text('S/. ',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                              color: Colors.black)),
+                      Text(
+                        plate.price.toStringAsFixed(2),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.black),
                       ),
-                      ElevatedButton(
-                        onPressed: () {},
-                        child: const Icon(
-                          Iconsax.shop_add4,
-                          color: Colors.white,
-                        ),
-                      )
                     ],
-                  )
+                  ),
                 ],
               ),
-            )
+            ),
+            Expanded(
+                child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              ),
+              onPressed: () {},
+              child: const Icon(
+                Iconsax.shop_add4,
+                color: Colors.white,
+              ),
+            ))
           ],
         ),
       ),
