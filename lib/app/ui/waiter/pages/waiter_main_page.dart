@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:segundo_muelle/app/ui/waiter/pages/waiter_main_controller.dart';
 import 'package:segundo_muelle/app/ui/waiter/pages/table_selection/table_selection_page.dart';
 import 'package:segundo_muelle/app/ui/theme/app_theme.dart';
 
-class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+class WaiterMainPage extends StatefulWidget {
+  const WaiterMainPage({Key? key}) : super(key: key);
 
   @override
-  _MainPageState createState() => _MainPageState();
+  _WaiterMainPageState createState() => _WaiterMainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _WaiterMainPageState extends State<WaiterMainPage> {
+  final WaiterMainController _waiterMainController = Get.put(WaiterMainController());
   var _currentIndex = 0;
 
   List<Widget> pages = [const TableSelectionPage(), Container()];
@@ -25,8 +28,7 @@ class _MainPageState extends State<MainPage> {
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20)),
+                  topLeft: Radius.circular(20), topRight: Radius.circular(20)),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black54.withOpacity(0.09),

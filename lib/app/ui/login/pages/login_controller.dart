@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:segundo_muelle/app/data/models/user_model.dart';
 import 'package:segundo_muelle/app/ui/admin/pages/admin_dashboard_page.dart';
-import 'package:segundo_muelle/app/ui/waiter/pages/main_page.dart';
+import 'package:segundo_muelle/app/ui/waiter/pages/waiter_main_page.dart';
 import 'package:segundo_muelle/core/utils/alert_utils.dart';
 import 'package:segundo_muelle/main_controller.dart';
 
@@ -55,7 +55,7 @@ class LoginController extends GetxController {
               } else {
                 userController.clear();
                 passwordController.clear();
-                Get.offAll(() => const MainPage());
+                Get.offAll(() => const WaiterMainPage());
               }
             } else {
               if (user.attemptsCount >= 3) {

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:segundo_muelle/app/data/models/table_model.dart';
 import 'package:segundo_muelle/app/ui/waiter/pages/plate_selection/plate_selection_page.dart';
 import 'package:segundo_muelle/app/ui/waiter/pages/table_selection/table_selection_controller.dart';
 import 'package:segundo_muelle/app/ui/login/pages/login_page.dart';
+import 'package:segundo_muelle/app/ui/waiter/pages/waiter_main_controller.dart';
 import 'package:segundo_muelle/main_controller.dart';
 
 class TableSelectionPage extends StatefulWidget {
@@ -16,18 +18,11 @@ class TableSelectionPage extends StatefulWidget {
 
 class _TableSelectionPageState extends State<TableSelectionPage> {
   final MainController _mainController = Get.find();
+  final WaiterMainController _waiterMainController = Get.find();
   final TableSelectionController _tableSelectionController =
       Get.put(TableSelectionController());
 
-  var tables = [
-    [1, 2],
-    [3, 4],
-    [5, 6],
-    [7, 8],
-    [9, 10]
-  ];
-
-  _buildTableItem(String name) {
+  _buildTableItem(TableModel table) {
     return Container(
       width: (Get.width - 60) / 2,
       padding: const EdgeInsets.only(bottom: 20),
@@ -37,7 +32,8 @@ class _TableSelectionPageState extends State<TableSelectionPage> {
           color: Colors.white,
           child: InkWell(
             onTap: () {
-              Get.to(PlateSelectionPage());
+              _waiterMainController.selectedTable(table);
+              Get.to(() => const PlateSelectionPage());
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
@@ -47,7 +43,7 @@ class _TableSelectionPageState extends State<TableSelectionPage> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Text(name)
+                  Text(table.name),
                 ],
               ),
             ),
@@ -113,7 +109,7 @@ class _TableSelectionPageState extends State<TableSelectionPage> {
                       spacing: 20,
                       children: [
                         ..._tableSelectionController.tables
-                            .map((e) => _buildTableItem(e.name))
+                            .map((table) => _buildTableItem(table))
                             .toList(),
                       ],
                     )

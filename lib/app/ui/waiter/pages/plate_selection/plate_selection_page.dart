@@ -5,6 +5,7 @@ import 'package:segundo_muelle/app/data/enums/category_enum.dart';
 import 'package:segundo_muelle/app/data/models/plate_model.dart';
 import 'package:segundo_muelle/app/ui/waiter/pages/plate_selection/plate_selection_controller.dart';
 import 'package:segundo_muelle/app/ui/theme/color_theme.dart';
+import 'package:segundo_muelle/app/ui/waiter/pages/waiter_main_controller.dart';
 import 'package:segundo_muelle/core/utils/category_utils.dart';
 
 class PlateSelectionPage extends StatefulWidget {
@@ -17,6 +18,7 @@ class PlateSelectionPage extends StatefulWidget {
 class _PlateSelectionPageState extends State<PlateSelectionPage> {
   final PlateSelectionController _plateSelectionController =
       Get.put(PlateSelectionController());
+  final WaiterMainController _waiterMainController = Get.find();
 
   AppBar _buildAppBar() {
     return AppBar(
@@ -47,11 +49,11 @@ class _PlateSelectionPageState extends State<PlateSelectionPage> {
       ],
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text('Selecciona el pedido para la '),
+        children: [
+          const Text('Selecciona el pedido para la '),
           Text(
-            'Mesa 2',
-            style: TextStyle(fontWeight: FontWeight.bold),
+            _waiterMainController.selectedTable.value.name,
+            style: const TextStyle(fontWeight: FontWeight.bold),
           )
         ],
       ),
