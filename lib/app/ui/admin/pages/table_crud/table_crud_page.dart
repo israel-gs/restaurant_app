@@ -114,17 +114,35 @@ class _TableCrudPageState extends State<TableCrudPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: const Color(0xFFEDF0F4),
-      appBar: _buildAppBar(),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 20, right: 20, top: 20, bottom: 90),
-                child: Obx(() => Column(
+        resizeToAvoidBottomInset: true,
+        backgroundColor: const Color(0xFFEDF0F4),
+        appBar: _buildAppBar(),
+        body: Obx(() {
+          if (_tableCrudController.tables.isEmpty) {
+            return Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: const [
+                  Icon(Iconsax.note_remove, size: 60, color: Colors.grey),
+                  SizedBox(height: 15),
+                  Text(
+                    'Añade nuevas mesas',
+                    style: TextStyle(color: Colors.grey, fontSize: 15),
+                  )
+                ],
+              ),
+            );
+          }
+          return Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 20, right: 20, top: 20, bottom: 90),
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         ..._tableCrudController.tables
@@ -138,12 +156,12 @@ class _TableCrudPageState extends State<TableCrudPage> {
                             .values
                             .toList(),
                       ],
-                    )),
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
-        ],
-      ),
-    );
+            ],
+          );
+        }));
   }
 }

@@ -1,11 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:segundo_muelle/app/data/enums/category_enum.dart';
 import 'package:segundo_muelle/app/data/models/plate_model.dart';
-import 'package:segundo_muelle/app/ui/home/pages/plate_selection_controller.dart';
+import 'package:segundo_muelle/app/ui/waiter/pages/plate_selection/plate_selection_controller.dart';
 import 'package:segundo_muelle/app/ui/theme/color_theme.dart';
 import 'package:segundo_muelle/core/utils/category_utils.dart';
 

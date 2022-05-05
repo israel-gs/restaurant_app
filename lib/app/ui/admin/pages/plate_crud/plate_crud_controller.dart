@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:segundo_muelle/app/data/enums/category_enum.dart';
 import 'package:segundo_muelle/app/data/models/plate_model.dart';
-import 'package:segundo_muelle/app/widgets/dialogs/confirmation_dialog.dart';
 import 'package:segundo_muelle/core/utils/alert_utils.dart';
 import 'package:segundo_muelle/core/utils/category_utils.dart';
 import 'package:segundo_muelle/main_controller.dart';

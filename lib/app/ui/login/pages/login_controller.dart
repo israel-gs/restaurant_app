@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:segundo_muelle/app/data/models/user_model.dart';
 import 'package:segundo_muelle/app/ui/admin/pages/admin_dashboard_page.dart';
-import 'package:segundo_muelle/app/ui/home/pages/main_page.dart';
+import 'package:segundo_muelle/app/ui/waiter/pages/main_page.dart';
 import 'package:segundo_muelle/core/utils/alert_utils.dart';
 import 'package:segundo_muelle/main_controller.dart';
 

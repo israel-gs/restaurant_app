@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:segundo_muelle/app/ui/home/pages/plate_selection_page.dart';
-import 'package:segundo_muelle/app/ui/home/pages/table_selection_controller.dart';
+import 'package:segundo_muelle/app/ui/waiter/pages/plate_selection/plate_selection_page.dart';
+import 'package:segundo_muelle/app/ui/waiter/pages/table_selection/table_selection_controller.dart';
 import 'package:segundo_muelle/app/ui/login/pages/login_page.dart';
 import 'package:segundo_muelle/main_controller.dart';
 

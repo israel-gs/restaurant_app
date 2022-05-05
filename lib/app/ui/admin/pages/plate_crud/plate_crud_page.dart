@@ -12,7 +12,7 @@ import 'package:segundo_muelle/core/utils/category_utils.dart';
 
 class PlateCrudPage extends StatelessWidget {
   final PlateCrudController _plateCrudController =
-      Get.put(PlateCrudController());
+  Get.put(PlateCrudController());
 
   PlateCrudPage({Key? key}) : super(key: key);
 
@@ -29,7 +29,7 @@ class PlateCrudPage extends StatelessWidget {
               onTap: () {},
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                 child: Column(
                   children: [
                     Row(
@@ -173,7 +173,7 @@ class PlateCrudPage extends StatelessWidget {
       elevation: 0,
       backgroundColor: Colors.transparent,
       titleTextStyle:
-          const TextStyle(color: Colors.black, fontFamily: 'Poppins'),
+      const TextStyle(color: Colors.black, fontFamily: 'Poppins'),
       toolbarTextStyle: const TextStyle(
         color: Colors.black,
       ),
@@ -211,20 +211,21 @@ class PlateCrudPage extends StatelessWidget {
         child: Obx(() {
           return SingleChildScrollView(
               child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text('Selecciona algúna categoría',
-                  style: TextStyle(
-                      color: ColorTheme.primary,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold)),
-              const SizedBox(height: 10),
-              ...CategoryEnum.values
-                  .map((category) => CheckboxListTile(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Selecciona algúna categoría',
+                      style: TextStyle(
+                          color: ColorTheme.primary,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 10),
+                  ...CategoryEnum.values
+                      .map((category) =>
+                      CheckboxListTile(
                         contentPadding: const EdgeInsets.symmetric(vertical: 0),
                         title:
-                            Text(CategoryUtils.getCategoryTypeString(category)),
+                        Text(CategoryUtils.getCategoryTypeString(category)),
                         value: _plateCrudController.selectedCategories
                             .contains(category),
                         onChanged: (selected) {
@@ -237,27 +238,28 @@ class PlateCrudPage extends StatelessWidget {
                           }
                         },
                       ))
-                  .toList()
-            ],
-          ));
+                      .toList()
+                ],
+              ));
         })));
   }
 
   void onDeletePlatePress(int index) {
     showDialog(
       context: Get.overlayContext!,
-      builder: (context) => ConfirmationDialog(
-        title: 'Eliminar',
-        denyButtonText: 'Cancelar',
-        subtitle: '¿Estás seguro de eliminar el plato?',
-        acceptButtonText: 'Eliminar',
-        onDeny: () {
-          _plateCrudController.onCancelDelete();
-        },
-        onAccept: () {
-          _plateCrudController.onAcceptDelete(index);
-        },
-      ),
+      builder: (context) =>
+          ConfirmationDialog(
+            title: 'Eliminar',
+            denyButtonText: 'Cancelar',
+            subtitle: '¿Estás seguro de eliminar el plato?',
+            acceptButtonText: 'Eliminar',
+            onDeny: () {
+              _plateCrudController.onCancelDelete();
+            },
+            onAccept: () {
+              _plateCrudController.onAcceptDelete(index);
+            },
+          ),
     );
   }
 
@@ -279,92 +281,95 @@ class PlateCrudPage extends StatelessWidget {
             ),
             child: SingleChildScrollView(
                 child: Form(
-              key: _plateCrudController.formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Editar Plato',
-                      style: TextStyle(
-                          color: ColorTheme.primary,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: _plateCrudController.editCodeTextController,
-                    decoration: const InputDecoration(labelText: 'Código'),
-                    // validator: _validateTewTableNameTextController,
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: _plateCrudController.editNameTextController,
-                    decoration:
-                        const InputDecoration(labelText: 'Nombre del Plato'),
-                    // validator: _validateTewTableNameTextController,
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: _plateCrudController.editPriceTextController,
-                    decoration: const InputDecoration(labelText: 'Precio'),
-                    // validator: _validateTewTableNameTextController,
-                  ),
-                  const SizedBox(height: 20),
-                  DropdownButtonFormField<CategoryEnum>(
-                    decoration: const InputDecoration(labelText: 'Categoría'),
-                    isExpanded: true,
-                    value: _plateCrudController.selectedCategory.value,
-                    items: _plateCrudController.categoryDropdownMenuItems,
-                    onChanged: (CategoryEnum? value) {
-                      _plateCrudController.selectedCategory(value);
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
+                  key: _plateCrudController.formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: TextButton(
-                            style: TextButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(6)),
-                              ),
-                            ),
-                            onPressed: () {
-                              Get.back();
-                            },
-                            child: const Text(
-                              'Cancelar',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  color: ColorTheme.primary),
-                            )),
+                      const Text('Editar Plato',
+                          style: TextStyle(
+                              color: ColorTheme.primary,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: _plateCrudController.editCodeTextController,
+                        decoration: const InputDecoration(labelText: 'Código'),
+                        // validator: _validateTewTableNameTextController,
                       ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                          child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 20),
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(6)),
-                          ),
-                        ),
-                        onPressed: () {
-                          _plateCrudController.onAcceptEditPlate(index);
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: _plateCrudController.editNameTextController,
+                        decoration:
+                        const InputDecoration(labelText: 'Nombre del Plato'),
+                        // validator: _validateTewTableNameTextController,
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: _plateCrudController
+                            .editPriceTextController,
+                        decoration: const InputDecoration(labelText: 'Precio'),
+                        // validator: _validateTewTableNameTextController,
+                      ),
+                      const SizedBox(height: 20),
+                      DropdownButtonFormField<CategoryEnum>(
+                        decoration: const InputDecoration(
+                            labelText: 'Categoría'),
+                        isExpanded: true,
+                        value: _plateCrudController.selectedCategory.value,
+                        items: _plateCrudController.categoryDropdownMenuItems,
+                        onChanged: (CategoryEnum? value) {
+                          _plateCrudController.selectedCategory(value);
                         },
-                        child: const Text(
-                          'Editar',
-                          style: TextStyle(fontWeight: FontWeight.w500),
-                        ),
-                      ))
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextButton(
+                                style: TextButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 20),
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(6)),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                child: const Text(
+                                  'Cancelar',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: ColorTheme.primary),
+                                )),
+                          ),
+                          const SizedBox(width: 20),
+                          Expanded(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  elevation: 0,
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 20),
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(6)),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  _plateCrudController.onAcceptEditPlate(index);
+                                },
+                                child: const Text(
+                                  'Editar',
+                                  style: TextStyle(fontWeight: FontWeight.w500),
+                                ),
+                              ))
+                        ],
+                      )
                     ],
-                  )
-                ],
-              ),
-            ))),
+                  ),
+                ))),
         enableDrag: true);
   }
 
@@ -381,92 +386,94 @@ class PlateCrudPage extends StatelessWidget {
             ),
             child: SingleChildScrollView(
                 child: Form(
-              key: _plateCrudController.formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Añadir Plato',
-                      style: TextStyle(
-                          color: ColorTheme.primary,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: _plateCrudController.addCodeTextController,
-                    decoration: const InputDecoration(labelText: 'Código'),
-                    // validator: _validateTewTableNameTextController,
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: _plateCrudController.addNameTextController,
-                    decoration:
-                        const InputDecoration(labelText: 'Nombre del Plato'),
-                    // validator: _validateTewTableNameTextController,
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: _plateCrudController.addPriceTextController,
-                    decoration: const InputDecoration(labelText: 'Precio'),
-                    // validator: _validateTewTableNameTextController,
-                  ),
-                  const SizedBox(height: 20),
-                  DropdownButtonFormField<CategoryEnum>(
-                    decoration: const InputDecoration(labelText: 'Categoría'),
-                    isExpanded: true,
-                    value: _plateCrudController.selectedCategory.value,
-                    items: _plateCrudController.categoryDropdownMenuItems,
-                    onChanged: (CategoryEnum? value) {
-                      _plateCrudController.selectedCategory(value);
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
+                  key: _plateCrudController.formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: TextButton(
-                            style: TextButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(6)),
-                              ),
-                            ),
-                            onPressed: () {
-                              Get.back();
-                            },
-                            child: const Text(
-                              'Cancelar',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  color: ColorTheme.primary),
-                            )),
+                      const Text('Añadir Plato',
+                          style: TextStyle(
+                              color: ColorTheme.primary,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: _plateCrudController.addCodeTextController,
+                        decoration: const InputDecoration(labelText: 'Código'),
+                        // validator: _validateTewTableNameTextController,
                       ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                          child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 20),
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(6)),
-                          ),
-                        ),
-                        onPressed: () {
-                          _plateCrudController.onAcceptAddPlate();
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: _plateCrudController.addNameTextController,
+                        decoration:
+                        const InputDecoration(labelText: 'Nombre del Plato'),
+                        // validator: _validateTewTableNameTextController,
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: _plateCrudController.addPriceTextController,
+                        decoration: const InputDecoration(labelText: 'Precio'),
+                        // validator: _validateTewTableNameTextController,
+                      ),
+                      const SizedBox(height: 20),
+                      DropdownButtonFormField<CategoryEnum>(
+                        decoration: const InputDecoration(
+                            labelText: 'Categoría'),
+                        isExpanded: true,
+                        value: _plateCrudController.selectedCategory.value,
+                        items: _plateCrudController.categoryDropdownMenuItems,
+                        onChanged: (CategoryEnum? value) {
+                          _plateCrudController.selectedCategory(value);
                         },
-                        child: const Text(
-                          'Añadir',
-                          style: TextStyle(fontWeight: FontWeight.w500),
-                        ),
-                      ))
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextButton(
+                                style: TextButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 20),
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(6)),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                child: const Text(
+                                  'Cancelar',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: ColorTheme.primary),
+                                )),
+                          ),
+                          const SizedBox(width: 20),
+                          Expanded(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  elevation: 0,
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 20),
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(6)),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  _plateCrudController.onAcceptAddPlate();
+                                },
+                                child: const Text(
+                                  'Añadir',
+                                  style: TextStyle(fontWeight: FontWeight.w500),
+                                ),
+                              ))
+                        ],
+                      )
                     ],
-                  )
-                ],
-              ),
-            ))),
+                  ),
+                ))),
         enableDrag: true);
   }
 
@@ -475,7 +482,7 @@ class PlateCrudPage extends StatelessWidget {
         _plateCrudController.selectedCategories.isEmpty;
     bool filterTextEmpty = _plateCrudController.filterText.value.isEmpty;
     bool selectedCategoriesContain =
-        _plateCrudController.selectedCategories.contains(plate.category);
+    _plateCrudController.selectedCategories.contains(plate.category);
     bool filterTextContain = plate.name
         .toLowerCase()
         .contains(_plateCrudController.filterText.value.toLowerCase());
@@ -489,39 +496,58 @@ class PlateCrudPage extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       backgroundColor: const Color(0xFFEDF0F4),
       appBar: _buildAppBar(),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 20, right: 20, top: 20, bottom: 90),
-                child: Obx(() => Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildSearchInput(),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        ..._plateCrudController.plates
-                            .where(filterPlates)
-                            .toList()
-                            .asMap()
-                            .map((index, element) {
-                              return MapEntry(
-                                  index,
-                                  _buildPlateItem(
-                                      plate: element, index: index));
-                            })
-                            .values
-                            .toList(),
-                      ],
-                    )),
+      body: Obx(() {
+        if (_plateCrudController.plates.isEmpty) {
+          return Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: const [
+                Icon(Iconsax.note_remove, size: 60, color: Colors.grey),
+                SizedBox(height: 15),
+                Text(
+                  'Añade un nuevo plato',
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                )
+              ],
+            ),
+          );
+        }
+        return Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 20, right: 20, top: 20, bottom: 90),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildSearchInput(),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      ..._plateCrudController.plates
+                          .where(filterPlates)
+                          .toList()
+                          .asMap()
+                          .map((index, element) {
+                        return MapEntry(
+                            index,
+                            _buildPlateItem(
+                                plate: element, index: index));
+                      })
+                          .values
+                          .toList(),
+                    ],
+                  ),
+                ),
               ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      }),
     );
   }
 }
