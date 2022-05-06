@@ -41,8 +41,6 @@ class LoginController extends GetxController {
         userController.clear();
         passwordController.clear();
         Get.offAll(() => const AdminDashboardPage());
-        // todo: implementar crud plato
-        // todo: crear tipo para los pedidos de la mesa (array de platos)
       } else {
         _mainController.userBox.values.toList().forEach((user) {
           if (user.username == userController.text) {

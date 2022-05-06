@@ -15,7 +15,7 @@ class AdminDashboardPage extends StatefulWidget {
 class _AdminDashboardPageState extends State<AdminDashboardPage> {
   var _currentIndex = 0;
 
-  List<Widget> pages = [const OptionSelectionPage(), const StatisticsPage()];
+  List<Widget> pages = [const OptionSelectionPage(), StatisticsPage()];
 
   @override
   Widget build(BuildContext context) {
