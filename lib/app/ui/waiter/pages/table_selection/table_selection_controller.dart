@@ -8,8 +8,13 @@ class TableSelectionController extends GetxController {
 
   @override
   void onInit() {
+    updateTables();
+    super.onInit();
+  }
+
+  updateTables() {
+    tables.clear();
     tables.addAll(_mainController.tableBox.values.toList());
     update();
-    super.onInit();
   }
 }

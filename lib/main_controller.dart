@@ -11,6 +11,7 @@ class MainController extends GetxController {
   late Box<TableModel> tableBox;
   late Box<UserModel> userBox;
   late Box<PlateModel> plateBox;
+  late Box<OrderModel> orderBox;
 
   var currentUser = UserModel(
     username: '',
@@ -41,5 +42,6 @@ class MainController extends GetxController {
     tableBox = await Hive.openBox<TableModel>('tableBox');
     plateBox = await Hive.openBox<PlateModel>('plateBox');
     userBox = await Hive.openBox<UserModel>('userBox');
+    orderBox = await Hive.openBox<OrderModel>('orderBox');
   }
 }

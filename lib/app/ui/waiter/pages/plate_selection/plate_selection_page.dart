@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -5,6 +6,7 @@ import 'package:segundo_muelle/app/data/enums/category_enum.dart';
 import 'package:segundo_muelle/app/data/models/plate_model.dart';
 import 'package:segundo_muelle/app/ui/waiter/pages/plate_selection/plate_selection_controller.dart';
 import 'package:segundo_muelle/app/ui/theme/color_theme.dart';
+import 'package:segundo_muelle/app/ui/waiter/pages/table_order/table_order_page.dart';
 import 'package:segundo_muelle/app/ui/waiter/pages/waiter_main_controller.dart';
 import 'package:segundo_muelle/core/utils/category_utils.dart';
 
@@ -17,7 +19,7 @@ class PlateSelectionPage extends StatefulWidget {
 
 class _PlateSelectionPageState extends State<PlateSelectionPage> {
   final PlateSelectionController _plateSelectionController =
-      Get.put(PlateSelectionController());
+  Get.put(PlateSelectionController());
   final WaiterMainController _waiterMainController = Get.find();
 
   AppBar _buildAppBar() {
@@ -34,7 +36,7 @@ class _PlateSelectionPageState extends State<PlateSelectionPage> {
       elevation: 0,
       backgroundColor: Colors.transparent,
       titleTextStyle:
-          const TextStyle(color: Colors.black, fontFamily: 'Poppins'),
+      const TextStyle(color: Colors.black, fontFamily: 'Poppins'),
       toolbarTextStyle: const TextStyle(
         color: Colors.black,
       ),
@@ -60,6 +62,27 @@ class _PlateSelectionPageState extends State<PlateSelectionPage> {
     );
   }
 
+  Widget _buildFloatingActionButton() {
+    return Obx(() {
+      int count = 0;
+      for (var element in _plateSelectionController.tempOrder.value.orderPlates) {
+        count += element.quantity;
+      }
+      return count > 0 ? Badge(
+        showBadge: count > 0,
+        position: BadgePosition.bottomStart(),
+        badgeContent:
+        Text(count.toString(), style: const TextStyle(color: Colors.white)),
+        child: FloatingActionButton(
+          onPressed: () {
+            Get.to(() => TableOrderPage());
+          },
+          child: const Icon(Iconsax.bag),
+        ),
+      ): Container();
+    });
+  }
+
   Widget _buildPlateItem(PlateModel plate) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -76,7 +99,9 @@ class _PlateSelectionPageState extends State<PlateSelectionPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(plate.code, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text(plate.code,
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold)),
                   const SizedBox(width: 10),
                   Text(plate.name),
                   Row(
@@ -100,16 +125,18 @@ class _PlateSelectionPageState extends State<PlateSelectionPage> {
             ),
             Expanded(
                 child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                padding:
+                  style: ElevatedButton.styleFrom(
+                    padding:
                     const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-              ),
-              onPressed: () {},
-              child: const Icon(
-                Iconsax.shop_add4,
-                color: Colors.white,
-              ),
-            ))
+                  ),
+                  onPressed: () {
+                    _plateSelectionController.addPlateToOrder(plate);
+                  },
+                  child: const Icon(
+                    Iconsax.shop_add4,
+                    color: Colors.white,
+                  ),
+                ))
           ],
         ),
       ),
@@ -147,7 +174,7 @@ class _PlateSelectionPageState extends State<PlateSelectionPage> {
                     style: TextStyle(
                         fontSize: 10,
                         fontWeight:
-                            (isSelected) ? FontWeight.bold : FontWeight.normal,
+                        (isSelected) ? FontWeight.bold : FontWeight.normal,
                         color: (isSelected) ? Colors.white : Colors.black),
                   )
                 ],
@@ -166,7 +193,7 @@ class _PlateSelectionPageState extends State<PlateSelectionPage> {
             .where(filterPlates)
             .map(
               (plate) => _buildPlateItem(plate),
-            )
+        )
             .toList(),
       ),
     );
@@ -190,9 +217,6 @@ class _PlateSelectionPageState extends State<PlateSelectionPage> {
 
   @override
   void initState() {
-    setState(() {
-      // selectedCategory = _categories[0];
-    });
     super.initState();
   }
 
@@ -202,10 +226,7 @@ class _PlateSelectionPageState extends State<PlateSelectionPage> {
       resizeToAvoidBottomInset: true,
       backgroundColor: const Color(0xFFEDF0F4),
       appBar: _buildAppBar(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Iconsax.bag),
-      ),
+      floatingActionButton: _buildFloatingActionButton(),
       body: Column(
         children: [
           Expanded(

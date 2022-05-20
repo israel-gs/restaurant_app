@@ -22,13 +22,14 @@ class OrderModelAdapter extends TypeAdapter<OrderModel> {
       date: fields[2] as DateTime,
       tip: fields[3] as double,
       orderPlates: (fields[4] as List).cast<OrderPlateModel>(),
+      orderClosed: fields[5] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, OrderModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.user)
       ..writeByte(1)
@@ -38,7 +39,9 @@ class OrderModelAdapter extends TypeAdapter<OrderModel> {
       ..writeByte(3)
       ..write(obj.tip)
       ..writeByte(4)
-      ..write(obj.orderPlates);
+      ..write(obj.orderPlates)
+      ..writeByte(5)
+      ..write(obj.orderClosed);
   }
 
   @override

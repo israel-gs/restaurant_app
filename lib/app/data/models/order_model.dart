@@ -22,11 +22,15 @@ class OrderModel {
   @HiveField(4)
   List<OrderPlateModel> orderPlates;
 
+  @HiveField(5)
+  bool orderClosed;
+
   OrderModel({
     required this.user,
     required this.table,
     required this.date,
     required this.tip,
     required this.orderPlates,
+    required this.orderClosed,
   });
 }
