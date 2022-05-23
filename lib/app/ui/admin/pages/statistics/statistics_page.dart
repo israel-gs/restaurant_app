@@ -1,14 +1,13 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui' as ui;
+
+import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:segundo_muelle/app/ui/login/pages/login_page.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:share/share.dart';
 import 'package:path_provider/path_provider.dart';
-import 'dart:ui' as ui;
+import 'package:share/share.dart';
 
 class OrderTemp {
   final int id;
@@ -22,6 +21,7 @@ class StatisticsPage extends StatelessWidget {
   StatisticsPage({Key? key}) : super(key: key);
 
   final GlobalKey _globalKey = GlobalKey();
+
   _buildAppBar() {
     return AppBar(
       elevation: 0,
@@ -61,7 +61,7 @@ class StatisticsPage extends StatelessWidget {
           .findRenderObject() as RenderRepaintBoundary;
       ui.Image image = await boundary.toImage(pixelRatio: 3.0);
       ByteData? byteData =
-      await (image.toByteData(format: ui.ImageByteFormat.png));
+          await (image.toByteData(format: ui.ImageByteFormat.png));
       if (byteData != null) {
         Uint8List pngBytes = byteData.buffer.asUint8List();
         final tempDir = await getTemporaryDirectory();
@@ -117,7 +117,8 @@ class StatisticsPage extends StatelessWidget {
                           id: 'Sales',
                           colorFn: (_, __) =>
                               charts.MaterialPalette.blue.shadeDefault,
-                          domainFn: (OrderTemp sales, _) => sales.name.toString(),
+                          domainFn: (OrderTemp sales, _) =>
+                              sales.name.toString(),
                           measureFn: (OrderTemp sales, _) => sales.quantity,
                           data: data,
                         )
@@ -138,7 +139,7 @@ class StatisticsPage extends StatelessWidget {
                         measureFn: (OrderTemp sales, _) => sales.quantity,
                         data: data2,
                         labelAccessorFn: (OrderTemp row, _) =>
-                        '${row.name}:${row.quantity}',
+                            '${row.name}:${row.quantity}',
                       )
                     ],
                     defaultRenderer: charts.ArcRendererConfig<Object>(
@@ -149,7 +150,7 @@ class StatisticsPage extends StatelessWidget {
                     animate: true,
                   ),
                 ),
-                const SizedBox(height: 60),
+                const SizedBox(height: 100),
               ],
             ),
           ),

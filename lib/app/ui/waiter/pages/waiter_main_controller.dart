@@ -5,7 +5,6 @@ class WaiterMainController extends GetxController {
   var selectedTable = TableModel(name: '', isTaken: false).obs;
 
   clearSelectedTable() {
-    print('clearSelectedTable');
     selectedTable.value = TableModel(name: '', isTaken: false);
   }
 }

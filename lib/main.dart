@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:segundo_muelle/app/data/repository/order_repository.dart';
+import 'package:segundo_muelle/app/data/repository/plate_repository.dart';
+import 'package:segundo_muelle/app/data/repository/table_repository.dart';
 import 'package:segundo_muelle/app/ui/login/pages/login_page.dart';
 import 'package:segundo_muelle/app/ui/theme/app_theme.dart';
 import 'package:segundo_muelle/main_controller.dart';
@@ -16,6 +19,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(MainController());
+    Get.put(TableRepository());
+    Get.put(PlateRepository());
+    Get.put(OrderRepository());
 
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,

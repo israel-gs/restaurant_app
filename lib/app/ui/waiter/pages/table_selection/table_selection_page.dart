@@ -3,11 +3,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:segundo_muelle/app/data/models/table_model.dart';
-import 'package:segundo_muelle/app/ui/theme/color_theme.dart';
-import 'package:segundo_muelle/app/ui/waiter/pages/plate_selection/plate_selection_page.dart';
-import 'package:segundo_muelle/app/ui/waiter/pages/table_selection/table_selection_controller.dart';
 import 'package:segundo_muelle/app/ui/login/pages/login_page.dart';
-import 'package:segundo_muelle/app/ui/waiter/pages/waiter_main_controller.dart';
+import 'package:segundo_muelle/app/ui/theme/color_theme.dart';
+import 'package:segundo_muelle/app/ui/waiter/pages/table_selection/table_selection_controller.dart';
 import 'package:segundo_muelle/main_controller.dart';
 
 class TableSelectionPage extends StatefulWidget {
@@ -19,9 +17,8 @@ class TableSelectionPage extends StatefulWidget {
 
 class _TableSelectionPageState extends State<TableSelectionPage> {
   final MainController _mainController = Get.find();
-  final WaiterMainController _waiterMainController = Get.find();
   final TableSelectionController _tableSelectionController =
-  Get.put(TableSelectionController());
+      Get.put(TableSelectionController());
 
   _buildTableItem(TableModel table) {
     return Container(
@@ -30,11 +27,17 @@ class _TableSelectionPageState extends State<TableSelectionPage> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(6),
         child: Material(
-          color: table.isTaken ? ColorTheme.primary.withOpacity(0.4) : Colors.white,
+          color: table.isTaken
+              ? ColorTheme.primary.withOpacity(0.4)
+              : Colors.white,
           child: InkWell(
             onTap: () {
-              _waiterMainController.selectedTable(table);
-              Get.to(() => const PlateSelectionPage());
+              _tableSelectionController.onSelectTable(table);
+            },
+            onLongPress: () {
+              if (table.isTaken) {
+                _tableSelectionController.onLongPressTable(table);
+              }
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),

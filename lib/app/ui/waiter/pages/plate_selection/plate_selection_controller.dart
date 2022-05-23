@@ -5,14 +5,22 @@ import 'package:segundo_muelle/app/data/models/order_plate_model.dart';
 import 'package:segundo_muelle/app/data/models/plate_model.dart';
 import 'package:segundo_muelle/app/data/models/table_model.dart';
 import 'package:segundo_muelle/app/data/models/user_model.dart';
+import 'package:segundo_muelle/app/data/repository/order_repository.dart';
+import 'package:segundo_muelle/app/data/repository/plate_repository.dart';
+import 'package:segundo_muelle/app/data/repository/table_repository.dart';
 import 'package:segundo_muelle/app/ui/waiter/pages/table_selection/table_selection_controller.dart';
 import 'package:segundo_muelle/app/ui/waiter/pages/waiter_main_controller.dart';
+import 'package:segundo_muelle/app/ui/waiter/pages/waiter_main_page.dart';
 import 'package:segundo_muelle/main_controller.dart';
 
 class PlateSelectionController extends GetxController {
   final MainController _mainController = Get.find();
   final WaiterMainController _waiterMainController = Get.find();
   final TableSelectionController _tableSelectionController = Get.find();
+
+  final PlateRepository _plateRepository = Get.find();
+  final TableRepository _tableRepository = Get.find();
+  final OrderRepository _orderRepository = Get.find();
 
   var selectedCategory = CategoryEnum.starterDish.obs;
   List<PlateModel> plates = <PlateModel>[].obs;
@@ -34,6 +42,7 @@ class PlateSelectionController extends GetxController {
     orderPlates: [],
     orderClosed: false,
   ).obs;
+  String orderKey = '';
 
   @override
   void onInit() {
@@ -44,29 +53,26 @@ class PlateSelectionController extends GetxController {
 
   @override
   void onClose() {
-    registerOrder();
-    updateTableStatus();
     _waiterMainController.clearSelectedTable();
     super.onClose();
   }
 
   void setPlates() {
-    plates.addAll(_mainController.plateBox.values.toList());
+    plates.addAll(_plateRepository.getPlates());
     update();
   }
 
   void setOrder() {
-    var orderAlreadyExist = _mainController.orderBox.values
-        .toList()
-        .firstWhereOrNull((element) =>
-            (element.table.name ==
-                _waiterMainController.selectedTable.value.name) &&
-            !element.orderClosed);
+    TableModel selectedTable = _waiterMainController.selectedTable.value;
+    var orderAlreadyExist = _orderRepository.getOrders().firstWhereOrNull(
+        (element) =>
+            (element.table.key == selectedTable.key) && !element.orderClosed);
     if (orderAlreadyExist != null) {
       tempOrder.value = orderAlreadyExist;
+      orderKey = orderAlreadyExist.key;
     } else {
       tempOrder.value.user = _mainController.currentUser.value;
-      tempOrder.value.table = _waiterMainController.selectedTable.value;
+      tempOrder.value.table = selectedTable;
       tempOrder.value.date = DateTime.now();
     }
     update();
@@ -74,17 +80,15 @@ class PlateSelectionController extends GetxController {
 
   void registerOrder() {
     if (tempOrder.value.orderPlates.isNotEmpty) {
-      _mainController.orderBox.add(tempOrder.value);
+      _orderRepository.registerOrder(tempOrder.value);
     }
   }
 
-  void updateTableStatus() {
-    if (tempOrder.value.orderPlates.isNotEmpty) {
-      _waiterMainController.selectedTable.value.isTaken = true;
-      _mainController.tableBox.values.toList().indexWhere((element) =>
-          element.name == _waiterMainController.selectedTable.value.name);
-      _tableSelectionController.updateTables();
-    }
+  void closeOrder() async {
+    await _tableSelectionController.updateTableStatus(
+        false, _waiterMainController.selectedTable.value);
+    clearTempOrder();
+    Get.offAll(() => const WaiterMainPage());
   }
 
   void addPlateToOrder(PlateModel plate) {
@@ -92,6 +96,7 @@ class PlateSelectionController extends GetxController {
         .indexWhere((element) => element.plate.code == plate.code);
     if (plateInOrderIndex >= 0) {
       tempOrder.value.orderPlates.elementAt(plateInOrderIndex).quantity++;
+      _orderRepository.updateOrder(orderKey, tempOrder.value);
     } else {
       tempOrder.value.orderPlates.add(
         OrderPlateModel(
@@ -99,7 +104,10 @@ class PlateSelectionController extends GetxController {
           quantity: 1,
         ),
       );
+      orderKey = _orderRepository.registerOrder(tempOrder.value);
     }
+    _tableSelectionController.updateTableStatus(
+        true, _waiterMainController.selectedTable.value);
     tempOrder.refresh();
   }
 
@@ -107,8 +115,13 @@ class PlateSelectionController extends GetxController {
     int plateInOrderIndex = tempOrder.value.orderPlates
         .indexWhere((element) => element.plate.code == plate.code);
     if (plateInOrderIndex >= 0) {
-      tempOrder.value.orderPlates.elementAt(plateInOrderIndex).quantity = quantity;
+      tempOrder.value.orderPlates.elementAt(plateInOrderIndex).quantity =
+          quantity;
     }
     tempOrder.refresh();
+  }
+
+  void clearTempOrder() {
+    tempOrder.value.orderPlates.clear();
   }
 }

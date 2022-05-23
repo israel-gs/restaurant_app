@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:segundo_muelle/app/data/models/table_model.dart';
+import 'package:segundo_muelle/app/data/repository/table_repository.dart';
 import 'package:segundo_muelle/app/widgets/dialogs/confirmation_dialog.dart';
 import 'package:segundo_muelle/core/utils/alert_utils.dart';
-import 'package:segundo_muelle/main_controller.dart';
 
 class TableCrudController extends GetxController {
-  final MainController _mainController = Get.find();
+  final TableRepository _tableRepository = Get.find();
+
   List<TableModel> tables = <TableModel>[].obs;
 
   final loginFormKey = GlobalKey<FormState>();
@@ -17,7 +18,7 @@ class TableCrudController extends GetxController {
 
   @override
   void onInit() {
-    tables.addAll(_mainController.tableBox.values.toList());
+    tables.addAll(_tableRepository.getTables());
     update();
     super.onInit();
   }
@@ -29,7 +30,7 @@ class TableCrudController extends GetxController {
     return null;
   }
 
-  onDeleteTable(int index) {
+  onDeleteTable(String key) {
     showDialog(
       context: Get.overlayContext!,
       builder: (context) => ConfirmationDialog(
@@ -41,10 +42,8 @@ class TableCrudController extends GetxController {
           onCancelDeleteTable();
         },
         onAccept: () {
-          _mainController.tableBox.deleteAt(index);
-          tables.clear();
-          tables.addAll(_mainController.tableBox.values.toList());
-          update();
+          _tableRepository.deleteTable(key);
+          _setTables();
           Get.back();
           AlertUtils.showSuccess('La mesa se eliminó correctamente');
         },
@@ -53,9 +52,7 @@ class TableCrudController extends GetxController {
   }
 
   onCancelDeleteTable() {
-    tables.clear();
-    tables.addAll(_mainController.tableBox.values.toList());
-    update();
+    _setTables();
     Get.back();
   }
 
@@ -81,12 +78,13 @@ class TableCrudController extends GetxController {
         },
         onAccept: () {
           if (loginFormKey.currentState!.validate()) {
-            _mainController.tableBox.add(TableModel(
-                name: newTableNameTextController.text, isTaken: false));
+            var table = TableModel(
+              name: newTableNameTextController.text,
+              isTaken: false,
+            );
+            _tableRepository.registerTable(table);
             newTableNameTextController.clear();
-            tables.clear();
-            tables.addAll(_mainController.tableBox.values.toList());
-            update();
+            _setTables();
             Get.back();
             AlertUtils.showSuccess('Mesa agregada correctamente');
           }
@@ -95,7 +93,7 @@ class TableCrudController extends GetxController {
     );
   }
 
-  onEditTable(int index, TableModel table) async {
+  onEditTable(String key, TableModel table) async {
     editTableNameTextController.text = table.name;
     await showDialog(
       context: Get.context!,
@@ -118,19 +116,22 @@ class TableCrudController extends GetxController {
         },
         onAccept: () {
           if (loginFormKey.currentState!.validate()) {
-            _mainController.tableBox.putAt(
-                index,
-                TableModel(
-                    name: editTableNameTextController.text, isTaken: false));
+            var table = TableModel(
+                name: editTableNameTextController.text, isTaken: false);
+            _tableRepository.updateTable(key, table);
             newTableNameTextController.clear();
-            tables.clear();
-            tables.addAll(_mainController.tableBox.values.toList());
-            update();
+            _setTables();
             Get.back();
             AlertUtils.showSuccess('La mesa se editó correctamente');
           }
         },
       ),
     );
+  }
+
+  _setTables() {
+    tables.clear();
+    tables.addAll(_tableRepository.getTables());
+    update();
   }
 }

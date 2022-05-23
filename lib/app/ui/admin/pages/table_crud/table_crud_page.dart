@@ -34,7 +34,15 @@ class _TableCrudPageState extends State<TableCrudPage> {
                 child: Row(
                   children: [
                     Column(
-                      children: [Text(table.name)],
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(table.name),
+                        Text(
+                          table.key,
+                          style:
+                              const TextStyle(color: Colors.grey, fontSize: 10),
+                        )
+                      ],
                     ),
                   ],
                 ),
@@ -45,13 +53,13 @@ class _TableCrudPageState extends State<TableCrudPage> {
         startActionPane: ActionPane(
           motion: const ScrollMotion(),
           dismissible: DismissiblePane(onDismissed: () {
-            _tableCrudController.onDeleteTable(index);
+            _tableCrudController.onDeleteTable(table.key);
           }),
           children: [
             SlidableItem(
                 backgroundColor: Colors.redAccent,
                 onTap: () {
-                  _tableCrudController.onDeleteTable(index);
+                  _tableCrudController.onDeleteTable(table.key);
                 },
                 icon: const Icon(
                   Iconsax.trash,
@@ -60,7 +68,7 @@ class _TableCrudPageState extends State<TableCrudPage> {
             SlidableItem(
                 backgroundColor: Colors.blueAccent,
                 onTap: () {
-                  _tableCrudController.onEditTable(index, table);
+                  _tableCrudController.onEditTable(table.key, table);
                 },
                 icon: const Icon(
                   Iconsax.edit,

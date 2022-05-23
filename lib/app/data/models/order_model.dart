@@ -6,7 +6,7 @@ import 'package:segundo_muelle/app/data/models/user_model.dart';
 part 'order_model.g.dart';
 
 @HiveType(typeId: 4)
-class OrderModel {
+class OrderModel extends HiveObject {
   @HiveField(0)
   UserModel user;
 
