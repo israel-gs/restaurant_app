@@ -85,9 +85,11 @@ class PlateSelectionController extends GetxController {
   }
 
   void closeOrder() async {
+    print('Cerramos la orden ${tempOrder.value.key}');
+    tempOrder.value.orderClosed = true;
+    _orderRepository.updateOrder(orderKey, tempOrder.value);
     await _tableSelectionController.updateTableStatus(
         false, _waiterMainController.selectedTable.value);
-    clearTempOrder();
     Get.offAll(() => const WaiterMainPage());
   }
 
@@ -96,7 +98,6 @@ class PlateSelectionController extends GetxController {
         .indexWhere((element) => element.plate.code == plate.code);
     if (plateInOrderIndex >= 0) {
       tempOrder.value.orderPlates.elementAt(plateInOrderIndex).quantity++;
-      _orderRepository.updateOrder(orderKey, tempOrder.value);
     } else {
       tempOrder.value.orderPlates.add(
         OrderPlateModel(
@@ -104,7 +105,13 @@ class PlateSelectionController extends GetxController {
           quantity: 1,
         ),
       );
+    }
+    if (orderKey == '') {
       orderKey = _orderRepository.registerOrder(tempOrder.value);
+      print('Se creo la orden con key: $orderKey');
+    } else {
+      _orderRepository.updateOrder(orderKey, tempOrder.value);
+      print('Se actualizo la orden con key: $orderKey');
     }
     _tableSelectionController.updateTableStatus(
         true, _waiterMainController.selectedTable.value);

@@ -5,21 +5,17 @@ import 'dart:ui' as ui;
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:segundo_muelle/app/ui/admin/pages/statistics/statistics_controller.dart';
 import 'package:share/share.dart';
-
-class OrderTemp {
-  final int id;
-  final String name;
-  final int quantity;
-
-  OrderTemp({required this.id, required this.name, required this.quantity});
-}
 
 class StatisticsPage extends StatelessWidget {
   StatisticsPage({Key? key}) : super(key: key);
-
+  final StatisticsController _statisticsController =
+      Get.put(StatisticsController());
   final GlobalKey _globalKey = GlobalKey();
 
   _buildAppBar() {
@@ -54,8 +50,64 @@ class StatisticsPage extends StatelessWidget {
     );
   }
 
+  _buildDateInput() {
+    var format = DateFormat('dd/MM/yyyy');
+    String startDate =
+        format.format(_statisticsController.dateTimeRange.value.start);
+    String endDate =
+        format.format(_statisticsController.dateTimeRange.value.end);
+    return Container(
+      margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            'Fecha',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 16,
+              color: Color(0xFF5F6C7E),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              _statisticsController.showDateRangeModal();
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: 15,
+                horizontal: 20,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    startDate + ' - ' + endDate,
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 16,
+                      color: Color(0xFF5F6C7E),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  const Icon(
+                    Iconsax.calendar,
+                    color: Color(0xFF5F6C7E),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<Uint8List?> _captureImageFromWidget() async {
-    print('ga');
     try {
       RenderRepaintBoundary boundary = _globalKey.currentContext!
           .findRenderObject() as RenderRepaintBoundary;
@@ -81,79 +133,76 @@ class StatisticsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<OrderTemp> data = [
-      OrderTemp(id: 0, name: 'Israel Gutierrez', quantity: 50),
-      OrderTemp(id: 1, name: 'Fernando Zapata.', quantity: 44),
-      OrderTemp(id: 2, name: 'Cesar Vazsquez', quantity: 15),
-    ];
-
-    List<OrderTemp> data2 = [
-      OrderTemp(id: 0, name: 'Ceviche', quantity: 40),
-      OrderTemp(id: 1, name: 'Chicha 1L.', quantity: 38),
-      OrderTemp(id: 2, name: 'Limonada 1L.', quantity: 22),
-    ];
-
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: const Color(0xFFEDF0F4),
       appBar: _buildAppBar(),
       body: SingleChildScrollView(
-        child: RepaintBoundary(
-          key: _globalKey,
-          child: Container(
-            color: const Color(0xFFEDF0F4),
-            child: Column(
+        child: Container(
+          color: const Color(0xFFEDF0F4),
+          child: Obx(() {
+            return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                _buildDateInput(),
                 const SizedBox(height: 40),
-                const Text('Atenciones por mesero'),
-                Center(
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    child: charts.BarChart(
-                      [
-                        charts.Series<OrderTemp, String>(
-                          id: 'Sales',
-                          colorFn: (_, __) =>
-                              charts.MaterialPalette.blue.shadeDefault,
-                          domainFn: (OrderTemp sales, _) =>
-                              sales.name.toString(),
-                          measureFn: (OrderTemp sales, _) => sales.quantity,
-                          data: data,
-                        )
+                RepaintBoundary(
+                    key: _globalKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text('Atenciones por mesero'),
+                        Center(
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.4,
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            child: charts.BarChart(
+                              [
+                                charts.Series<GraphModel, String>(
+                                  id: 'Sales',
+                                  colorFn: (_, __) =>
+                                      charts.MaterialPalette.blue.shadeDefault,
+                                  domainFn: (GraphModel sales, _) =>
+                                      sales.name.toString(),
+                                  measureFn: (GraphModel sales, _) =>
+                                      sales.quantity,
+                                  data: _statisticsController.userSales.value,
+                                )
+                              ],
+                              animate: true,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 40),
+                        const Text('Platos mas vendidos'),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.4,
+                          child: charts.PieChart(
+                            [
+                              charts.Series<GraphModel, String>(
+                                id: 'Sales2',
+                                domainFn: (GraphModel sales, _) => sales.id,
+                                measureFn: (GraphModel sales, _) =>
+                                    sales.quantity,
+                                data: _statisticsController.plateSales.value,
+                                labelAccessorFn: (GraphModel row, _) =>
+                                    '${row.name}:${row.quantity}',
+                              )
+                            ],
+                            defaultRenderer: charts.ArcRendererConfig<Object>(
+                              arcRendererDecorators: [
+                                charts.ArcLabelDecorator(),
+                              ],
+                            ),
+                            animate: true,
+                          ),
+                        ),
                       ],
-                      animate: true,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 40),
-                const Text('Platos mas vendidos'),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.4,
-                  child: charts.PieChart(
-                    [
-                      charts.Series<OrderTemp, int>(
-                        id: 'Sales2',
-                        domainFn: (OrderTemp sales, _) => sales.id,
-                        measureFn: (OrderTemp sales, _) => sales.quantity,
-                        data: data2,
-                        labelAccessorFn: (OrderTemp row, _) =>
-                            '${row.name}:${row.quantity}',
-                      )
-                    ],
-                    defaultRenderer: charts.ArcRendererConfig<Object>(
-                      arcRendererDecorators: [
-                        charts.ArcLabelDecorator(),
-                      ],
-                    ),
-                    animate: true,
-                  ),
-                ),
+                    )),
                 const SizedBox(height: 100),
               ],
-            ),
-          ),
+            );
+          }),
         ),
       ),
     );
