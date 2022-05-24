@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:segundo_muelle/app/ui/theme/app_theme.dart';
+import 'package:segundo_muelle/app/ui/waiter/pages/statistics/statistics_page.dart';
 import 'package:segundo_muelle/app/ui/waiter/pages/table_selection/table_selection_page.dart';
 import 'package:segundo_muelle/app/ui/waiter/pages/waiter_main_controller.dart';
 import 'package:segundo_muelle/main_controller.dart';
@@ -20,21 +21,7 @@ class _WaiterMainPageState extends State<WaiterMainPage> {
   final MainController _mainController = Get.find();
   var _currentIndex = 0;
 
-  List<Widget> pages = [
-    const TableSelectionPage(),
-    Scaffold(
-      body: Container(
-        child: Column(
-          children: [
-            Text('Orden',
-                style: const TextStyle(fontSize: 20, color: Colors.black)),
-            Text('Orden'),
-            Text('Orden'),
-          ],
-        ),
-      ),
-    )
-  ];
+  List<Widget> pages = [const TableSelectionPage(), StatisticsPage()];
 
   @override
   Widget build(BuildContext context) {

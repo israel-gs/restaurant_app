@@ -47,9 +47,11 @@ dependencies:
   badges: ^2.0.2
   uuid: 3.0.6
   intl: ^0.17.0
+  syncfusion_flutter_datagrid: ^20.1.56
+  syncfusion_flutter_xlsio: ^20.1.56-beta
 
-  flutter_localizations: # Add this line
-    sdk: flutter         # Add this line
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
