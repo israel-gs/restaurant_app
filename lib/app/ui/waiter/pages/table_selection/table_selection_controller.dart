@@ -22,6 +22,7 @@ class TableSelectionController extends GetxController {
   updateTables() {
     tables.clear();
     tables.addAll(_tableRepository.getTables());
+    tables.sort((a, b) => a.name.compareTo(b.name));
     update();
   }
 

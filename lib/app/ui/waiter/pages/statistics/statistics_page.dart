@@ -11,7 +11,7 @@ class StatisticsPage extends StatelessWidget {
   StatisticsPage({Key? key}) : super(key: key);
 
   final StatisticsController _statisticsController =
-  Get.put(StatisticsController());
+      Get.put(StatisticsController());
 
   final MainController _mainController = Get.find();
 
@@ -59,6 +59,9 @@ class StatisticsPage extends StatelessWidget {
           DataCell(
             Text(order.key.toString()),
           ),
+          DataCell(
+            Text(order.table.name),
+          ),
           DataCell(Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -82,9 +85,9 @@ class StatisticsPage extends StatelessWidget {
   _buildDateInput() {
     var format = DateFormat('dd/MM/yyyy');
     String startDate =
-    format.format(_statisticsController.dateTimeRange.value.start);
+        format.format(_statisticsController.dateTimeRange.value.start);
     String endDate =
-    format.format(_statisticsController.dateTimeRange.value.end);
+        format.format(_statisticsController.dateTimeRange.value.end);
     return Container(
       margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
       child: Row(
@@ -146,25 +149,24 @@ class StatisticsPage extends StatelessWidget {
               child: ElevatedButton.icon(
                 icon: _statisticsController.loadingExport.value
                     ? const SizedBox(
-                  height: 20,
-                  width: 20,
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                    strokeWidth: 2,
-                  ),
-                )
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
                     : const Icon(
-                  Iconsax.document_download,
-                  color: Colors.white,
-                  size: 20,
-                ),
+                        Iconsax.document_download,
+                        color: Colors.white,
+                        size: 20,
+                      ),
                 style: ElevatedButton.styleFrom(
                   primary: const Color(0xFF1D6F42),
                   elevation: 0,
                   padding: const EdgeInsets.all(16),
                   shape: const RoundedRectangleBorder(
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(6)),
+                    borderRadius: BorderRadius.all(Radius.circular(6)),
                   ),
                 ),
                 onPressed: _statisticsController.exportToExcel,
@@ -210,6 +212,9 @@ class StatisticsPage extends StatelessWidget {
                       columns: const [
                         DataColumn(
                           label: Text('ID'),
+                        ),
+                        DataColumn(
+                          label: Text('Mesa'),
                         ),
                         DataColumn(
                           label: Text('Platos'),

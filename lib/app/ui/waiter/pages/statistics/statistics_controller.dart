@@ -64,22 +64,24 @@ class StatisticsController extends GetxController {
     final Workbook workbook = Workbook();
     final Worksheet sheet = workbook.worksheets[0];
     sheet.getRangeByName('A1').setText('ID');
-    sheet.getRangeByName('B1').setText('PLATOS');
-    sheet.getRangeByName('C1').setText('FECHA');
-    sheet.getRangeByName('D1').setText('TOTAL');
+    sheet.getRangeByName('B1').setText('MESA');
+    sheet.getRangeByName('C1').setText('PLATOS');
+    sheet.getRangeByName('D1').setText('FECHA');
+    sheet.getRangeByName('E1').setText('TOTAL');
     for (var i = 0; i < sales.value.length; i++) {
       var order = sales.value[i];
       var amount = order.orderPlates
           .map((e) => e.quantity * e.plate.price)
           .reduce((a, b) => a + b);
       sheet.getRangeByName('A${i + 2}').setText(order.key.toString());
-      sheet.getRangeByName('B${i + 2}').setText(
+      sheet.getRangeByName('B${i + 2}').setText(order.table.name);
+      sheet.getRangeByName('C${i + 2}').setText(
             order.orderPlates
                 .map((e) => e.plate.name + '    ' + e.quantity.toString())
                 .join('\n'),
           );
-      sheet.getRangeByName('C${i + 2}').setDateTime(order.date);
-      sheet.getRangeByName('D${i + 2}').setNumber(amount);
+      sheet.getRangeByName('D${i + 2}').setDateTime(order.date);
+      sheet.getRangeByName('E${i + 2}').setNumber(amount);
     }
     final tempDir = await getTemporaryDirectory();
     String excelPath =
