@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:segundo_muelle/app/ui/theme/color_theme.dart';
 import 'package:segundo_muelle/app/ui/waiter/pages/plate_selection/plate_selection_controller.dart';
 import 'package:segundo_muelle/app/ui/waiter/pages/process_order/process_order_controller.dart';
 import 'package:segundo_muelle/app/ui/waiter/pages/waiter_main_controller.dart';
+
+const String CURRENCY_REGEX = '^\$|^(0|([1-9][0-9]{0,}))(\\.[0-9]{0,2})?\$';
 
 class ProcessOrderPage extends StatelessWidget {
   ProcessOrderPage({Key? key}) : super(key: key);
@@ -57,10 +60,10 @@ class ProcessOrderPage extends StatelessWidget {
   Widget _buildAmountText() {
     var amount = _plateSelectionController.tempOrder.value.orderPlates
         .map((e) => e.quantity * e.plate.price)
-        .reduce((a, b) => a + b)
-        .toStringAsFixed(2);
+        .reduce((a, b) => a + b);
+    amount = amount + _plateSelectionController.tempOrder.value.tip;
     return Text(
-      'S/ $amount',
+      'S/ ${amount.toStringAsFixed(2)}',
       style: const TextStyle(
         fontSize: 32,
         fontWeight: FontWeight.bold,
@@ -91,10 +94,16 @@ class ProcessOrderPage extends StatelessWidget {
                 ),
                 _buildAmountText(),
                 const SizedBox(height: 90),
-                const TextField(
-                  decoration: InputDecoration(
+                TextField(
+                  controller: _processOrderController.amountController,
+                  decoration: const InputDecoration(
                     hintText: 'Ingrese su propina',
+                    labelText: 'Propina',
                   ),
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(CURRENCY_REGEX)),
+                  ],
                 ),
                 const SizedBox(height: 16),
                 Row(
@@ -108,7 +117,9 @@ class ProcessOrderPage extends StatelessWidget {
                             borderRadius: BorderRadius.all(Radius.circular(6)),
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          _processOrderController.addTip();
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [

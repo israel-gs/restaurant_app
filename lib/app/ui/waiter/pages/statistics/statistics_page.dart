@@ -76,6 +76,9 @@ class StatisticsPage extends StatelessWidget {
           DataCell(
             Text(dateFormat.format(order.date)),
           ),
+          DataCell(
+            Text(order.tip.toStringAsFixed(2)),
+          ),
           DataCell(Text(amount)),
         ],
       );
@@ -220,6 +223,7 @@ class StatisticsPage extends StatelessWidget {
                           label: Text('Platos'),
                         ),
                         DataColumn(label: Text('Fecha')),
+                        DataColumn(label: Text('Propina')),
                         DataColumn(label: Text('Total')),
                       ],
                       rows: _buildTableRows(),

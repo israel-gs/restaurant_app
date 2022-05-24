@@ -67,7 +67,8 @@ class StatisticsController extends GetxController {
     sheet.getRangeByName('B1').setText('MESA');
     sheet.getRangeByName('C1').setText('PLATOS');
     sheet.getRangeByName('D1').setText('FECHA');
-    sheet.getRangeByName('E1').setText('TOTAL');
+    sheet.getRangeByName('E1').setText('PROPINA');
+    sheet.getRangeByName('F1').setText('TOTAL');
     for (var i = 0; i < sales.value.length; i++) {
       var order = sales.value[i];
       var amount = order.orderPlates
@@ -81,7 +82,8 @@ class StatisticsController extends GetxController {
                 .join('\n'),
           );
       sheet.getRangeByName('D${i + 2}').setDateTime(order.date);
-      sheet.getRangeByName('E${i + 2}').setNumber(amount);
+      sheet.getRangeByName('E${i + 2}').setNumber(order.tip);
+      sheet.getRangeByName('F${i + 2}').setNumber(amount);
     }
     final tempDir = await getTemporaryDirectory();
     String excelPath =

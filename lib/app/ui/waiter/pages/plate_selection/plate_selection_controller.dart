@@ -131,4 +131,10 @@ class PlateSelectionController extends GetxController {
   void clearTempOrder() {
     tempOrder.value.orderPlates.clear();
   }
+
+  void addTip(double tip) {
+    tempOrder.value.tip = tip;
+    tempOrder.refresh();
+    _orderRepository.updateOrder(orderKey, tempOrder.value);
+  }
 }

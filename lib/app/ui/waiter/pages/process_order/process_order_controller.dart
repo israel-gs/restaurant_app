@@ -5,6 +5,19 @@ import 'package:segundo_muelle/app/widgets/dialogs/confirmation_dialog.dart';
 
 class ProcessOrderController extends GetxController {
   final PlateSelectionController _plateSelectionController = Get.find();
+  TextEditingController amountController = TextEditingController();
+
+  @override
+  void onInit() {
+    amountController.text =
+        _plateSelectionController.tempOrder.value.tip.toString();
+    super.onInit();
+  }
+
+  addTip() {
+    var tip = double.parse(amountController.text);
+    _plateSelectionController.addTip(tip);
+  }
 
   onCloseTable() {
     showDialog(
