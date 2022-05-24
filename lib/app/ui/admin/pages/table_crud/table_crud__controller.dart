@@ -18,8 +18,7 @@ class TableCrudController extends GetxController {
 
   @override
   void onInit() {
-    tables.addAll(_tableRepository.getTables());
-    update();
+    _setTables();
     super.onInit();
   }
 
@@ -132,6 +131,7 @@ class TableCrudController extends GetxController {
   _setTables() {
     tables.clear();
     tables.addAll(_tableRepository.getTables());
+    tables.sort((a, b) => a.name.compareTo(b.name));
     update();
   }
 }
