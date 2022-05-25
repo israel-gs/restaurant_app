@@ -29,9 +29,17 @@ class _UserCrudPageState extends State<UserCrudPage> {
               onTap: () {},
               child: Padding(
                 padding:
-                const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(
+                      user.key,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey,
+                      ),
+                    ),
                     Row(
                       children: [
                         const Text(
@@ -126,13 +134,13 @@ class _UserCrudPageState extends State<UserCrudPage> {
         startActionPane: ActionPane(
           motion: const ScrollMotion(),
           dismissible: DismissiblePane(onDismissed: () {
-            _userCrudController.onDeleteUser(index);
+            _userCrudController.onDeleteUser(user.key);
           }),
           children: [
             SlidableItem(
                 backgroundColor: Colors.redAccent,
                 onTap: () {
-                  _userCrudController.onDeleteUser(index);
+                  _userCrudController.onDeleteUser(user.key);
                 },
                 icon: const Icon(
                   Iconsax.trash,
@@ -141,7 +149,7 @@ class _UserCrudPageState extends State<UserCrudPage> {
             SlidableItem(
                 backgroundColor: Colors.blueAccent,
                 onTap: () {
-                  _userCrudController.onEditUser(index, user);
+                  _userCrudController.onEditUser(user.key, user);
                 },
                 icon: const Icon(
                   Iconsax.edit,
@@ -167,7 +175,7 @@ class _UserCrudPageState extends State<UserCrudPage> {
       elevation: 0,
       backgroundColor: Colors.transparent,
       titleTextStyle:
-      const TextStyle(color: Colors.black, fontFamily: 'Poppins'),
+          const TextStyle(color: Colors.black, fontFamily: 'Poppins'),
       toolbarTextStyle: const TextStyle(
         color: Colors.black,
       ),
@@ -229,9 +237,9 @@ class _UserCrudPageState extends State<UserCrudPage> {
                       ..._userCrudController.users
                           .asMap()
                           .map((index, element) {
-                        return MapEntry(index,
-                            _buildUserItem(user: element, index: index));
-                      })
+                            return MapEntry(index,
+                                _buildUserItem(user: element, index: index));
+                          })
                           .values
                           .toList(),
                     ],

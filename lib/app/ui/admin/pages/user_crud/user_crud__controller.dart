@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:segundo_muelle/app/data/models/user_model.dart';
+import 'package:segundo_muelle/app/data/repository/user_repository.dart';
 import 'package:segundo_muelle/app/widgets/dialogs/confirmation_dialog.dart';
 import 'package:segundo_muelle/core/utils/alert_utils.dart';
-import 'package:segundo_muelle/main_controller.dart';
 
 class UserCrudController extends GetxController {
-  final MainController _mainController = Get.find();
+  final UserRepository _userRepository = UserRepository();
   List<UserModel> users = <UserModel>[].obs;
 
   final formKey = GlobalKey<FormState>();
@@ -28,8 +28,7 @@ class UserCrudController extends GetxController {
 
   @override
   void onInit() {
-    users.addAll(_mainController.userBox.values.toList());
-    update();
+    _setUsers();
     super.onInit();
   }
 
@@ -40,7 +39,7 @@ class UserCrudController extends GetxController {
     return null;
   }
 
-  onDeleteUser(int index) {
+  onDeleteUser(String key) {
     showDialog(
       context: Get.overlayContext!,
       builder: (context) => ConfirmationDialog(
@@ -52,10 +51,8 @@ class UserCrudController extends GetxController {
           onCancelDeleteUser();
         },
         onAccept: () {
-          _mainController.userBox.deleteAt(index);
-          users.clear();
-          users.addAll(_mainController.userBox.values.toList());
-          update();
+          _userRepository.deleteUser(key);
+          _setUsers();
           Get.back();
           AlertUtils.showSuccess('El usuario se eliminó correctamente');
         },
@@ -64,9 +61,7 @@ class UserCrudController extends GetxController {
   }
 
   onCancelDeleteUser() {
-    users.clear();
-    users.addAll(_mainController.userBox.values.toList());
-    update();
+    _setUsers();
     Get.back();
   }
 
@@ -136,12 +131,12 @@ class UserCrudController extends GetxController {
           );
         }),
         onDeny: () {
+          _resetForm();
           Get.back();
-          formKey.currentState?.reset();
         },
         onAccept: () {
           if (formKey.currentState!.validate()) {
-            _mainController.userBox.add(UserModel(
+            _userRepository.registerUser(UserModel(
               name: addNameTextController.text,
               password: addPasswordTextController.text,
               username: addUsernameTextController.text,
@@ -149,12 +144,8 @@ class UserCrudController extends GetxController {
               isBlocked: addUserIsBlocked.value,
               attemptsCount: 0,
             ));
-            formKey.currentState?.reset();
-            addUserIsBlocked(false);
-            addUserIsAdmin(false);
-            users.clear();
-            users.addAll(_mainController.userBox.values.toList());
-            update();
+            _resetForm();
+            _setUsers();
             Get.back();
             AlertUtils.showSuccess('Usuario creado correctamente');
           }
@@ -163,7 +154,7 @@ class UserCrudController extends GetxController {
     );
   }
 
-  onEditUser(int index, UserModel user) async {
+  onEditUser(String key, UserModel user) async {
     editNameTextController.text = user.name;
     editUsernameTextController.text = user.username;
     editPasswordTextController.text = user.password;
@@ -234,13 +225,13 @@ class UserCrudController extends GetxController {
           );
         }),
         onDeny: () {
+          _resetForm();
           Get.back();
-          formKey.currentState?.reset();
         },
         onAccept: () {
           if (formKey.currentState!.validate()) {
-            _mainController.userBox.putAt(
-                index,
+            _userRepository.updateUser(
+                key,
                 UserModel(
                   name: editNameTextController.text,
                   password: editPasswordTextController.text,
@@ -251,15 +242,27 @@ class UserCrudController extends GetxController {
                       ? 0
                       : user.attemptsCount,
                 ));
-            formKey.currentState?.reset();
-            users.clear();
-            users.addAll(_mainController.userBox.values.toList());
-            update();
+            _resetForm();
+            _setUsers();
             Get.back();
             AlertUtils.showSuccess('El usuario se editó correctamente');
           }
         },
       ),
     );
+  }
+
+  _setUsers() {
+    users.clear();
+    users.addAll(_userRepository.getUsers());
+    update();
+  }
+
+  _resetForm() {
+    addNameTextController.clear();
+    addUsernameTextController.clear();
+    addPasswordTextController.clear();
+    addUserIsBlocked(false);
+    addUserIsAdmin(false);
   }
 }
