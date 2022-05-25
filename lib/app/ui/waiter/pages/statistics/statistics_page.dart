@@ -174,7 +174,7 @@ class StatisticsPage extends StatelessWidget {
                 ),
                 onPressed: _statisticsController.exportToExcel,
                 label: const Text(
-                  'Exportar',
+                  'Exportar (.xlsx)',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,

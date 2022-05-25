@@ -160,8 +160,6 @@ class StatisticsPage extends StatelessWidget {
                               [
                                 charts.Series<GraphModel, String>(
                                   id: 'Sales',
-                                  colorFn: (_, __) =>
-                                      charts.MaterialPalette.blue.shadeDefault,
                                   domainFn: (GraphModel sales, _) =>
                                       sales.name.toString(),
                                   measureFn: (GraphModel sales, _) =>
