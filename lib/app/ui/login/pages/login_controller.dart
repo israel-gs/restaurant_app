@@ -40,6 +40,14 @@ class LoginController extends GetxController {
           passwordController.text == 'admin') {
         userController.clear();
         passwordController.clear();
+        _mainController.currentUser(UserModel(
+          name: 'Administrador',
+          isAdmin: true,
+          isBlocked: false,
+          password: 'admin',
+          username: 'admin',
+          attemptsCount: 0,
+        ));
         Get.offAll(() => const AdminDashboardPage());
       } else {
         _mainController.userBox.values.toList().forEach((user) {

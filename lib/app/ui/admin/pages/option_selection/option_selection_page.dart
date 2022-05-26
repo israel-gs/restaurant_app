@@ -6,6 +6,9 @@ import 'package:segundo_muelle/app/ui/admin/pages/table_crud/table_crud_page.dar
 import 'package:segundo_muelle/app/ui/admin/pages/user_crud/user_crud_page.dart';
 import 'package:segundo_muelle/app/ui/login/pages/login_page.dart';
 
+mport 'package:segundo_muelle/main_controller.dart
+';
+
 class OptionSelectionPage extends StatefulWidget {
   const OptionSelectionPage({Key? key}) : super(key: key);
 
@@ -14,6 +17,8 @@ class OptionSelectionPage extends StatefulWidget {
 }
 
 class _OptionSelectionPageState extends State<OptionSelectionPage> {
+  final MainController _mainController = Get.find();
+
   _buildAppBar() {
     return AppBar(
       elevation: 0,
@@ -35,21 +40,20 @@ class _OptionSelectionPageState extends State<OptionSelectionPage> {
         )
       ],
       title: Row(
-        children: const [
-          Text('Hola '),
+        children: [
+          const Text('Hola '),
           Text(
-            'Israel',
-            style: TextStyle(fontWeight: FontWeight.bold),
+            _mainController.currentUser.value.name,
+            style: const TextStyle(fontWeight: FontWeight.bold),
           )
         ],
       ),
     );
   }
 
-  _buildItem(
-      {required IconData iconData,
-      required String title,
-      required Function onTap}) {
+  _buildItem({required IconData iconData,
+    required String title,
+    required Function onTap}) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(6),
       child: Material(
