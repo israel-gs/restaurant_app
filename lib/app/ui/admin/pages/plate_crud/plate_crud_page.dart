@@ -17,6 +17,15 @@ class PlateCrudPage extends StatelessWidget {
   PlateCrudPage({Key? key}) : super(key: key);
 
   Widget _buildPlateItem({required PlateModel plate, required int index}) {
+    var textStyle = const TextStyle(
+      fontSize: 15,
+      color: Colors.black54,
+    );
+    var labelStyle = const TextStyle(
+      fontSize: 13,
+      fontWeight: FontWeight.bold,
+      color: Colors.black54,
+    );
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Slidable(
@@ -31,37 +40,59 @@ class PlateCrudPage extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(
+                      plate.key.toString(),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey,
+                      ),
+                    ),
                     Row(
                       children: [
-                        const Text('Nombre: '),
+                        Text(
+                          'Nombre: ',
+                          style: labelStyle,
+                        ),
                         const SizedBox(width: 10),
-                        Text(plate.name)
+                        Text(plate.name, style: textStyle)
                       ],
                     ),
-                    const SizedBox(height: 10),
                     Row(
                       children: [
-                        const Text('Código: '),
+                        Text(
+                          'Código: ',
+                          style: labelStyle,
+                        ),
                         const SizedBox(width: 10),
-                        Text(plate.code)
+                        Text(plate.code, style: textStyle)
                       ],
                     ),
-                    const SizedBox(height: 10),
                     Row(
                       children: [
-                        const Text('Categoria: '),
+                        Text(
+                          'Categoria: ',
+                          style: labelStyle,
+                        ),
                         const SizedBox(width: 10),
                         Text(
-                            CategoryUtils.getCategoryTypeString(plate.category))
+                          CategoryUtils.getCategoryTypeString(plate.category),
+                          style: textStyle,
+                        )
                       ],
                     ),
-                    const SizedBox(height: 10),
                     Row(
                       children: [
-                        const Text('Precio: '),
+                        Text(
+                          'Precio: ',
+                          style: labelStyle,
+                        ),
                         const SizedBox(width: 10),
-                        Text('S/ ${plate.price.toStringAsFixed(2)}')
+                        Text(
+                          'S/ ${plate.price.toStringAsFixed(2)}',
+                          style: textStyle,
+                        )
                       ],
                     ),
                   ],
@@ -73,13 +104,13 @@ class PlateCrudPage extends StatelessWidget {
         startActionPane: ActionPane(
           motion: const ScrollMotion(),
           dismissible: DismissiblePane(onDismissed: () {
-            onDeletePlatePress(index);
+            onDeletePlatePress(plate.key);
           }),
           children: [
             SlidableItem(
                 backgroundColor: Colors.redAccent,
                 onTap: () {
-                  onDeletePlatePress(index);
+                  onDeletePlatePress(plate.key);
                 },
                 icon: const Icon(
                   Iconsax.trash,
@@ -243,7 +274,7 @@ class PlateCrudPage extends StatelessWidget {
         })));
   }
 
-  void onDeletePlatePress(int index) {
+  void onDeletePlatePress(String key) {
     showDialog(
       context: Get.overlayContext!,
       builder: (context) => ConfirmationDialog(
@@ -255,7 +286,7 @@ class PlateCrudPage extends StatelessWidget {
           _plateCrudController.onCancelDelete();
         },
         onAccept: () {
-          _plateCrudController.onAcceptDelete(index);
+          _plateCrudController.onAcceptDelete(key);
         },
       ),
     );
@@ -353,7 +384,7 @@ class PlateCrudPage extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          _plateCrudController.onAcceptEditPlate(index);
+                          _plateCrudController.onAcceptEditPlate(plate.key);
                         },
                         child: const Text(
                           'Editar',

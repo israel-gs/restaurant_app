@@ -18,6 +18,10 @@ class _TableCrudPageState extends State<TableCrudPage> {
       Get.put(TableCrudController());
 
   Widget _buildTableItem({required TableModel table, required int index}) {
+    var textStyle = const TextStyle(
+      fontSize: 15,
+      color: Colors.black54,
+    );
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Slidable(
@@ -36,12 +40,14 @@ class _TableCrudPageState extends State<TableCrudPage> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(table.name),
                         Text(
                           table.key,
-                          style:
-                              const TextStyle(color: Colors.grey, fontSize: 10),
-                        )
+                          style: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 10,
+                          ),
+                        ),
+                        Text(table.name, style: textStyle),
                       ],
                     ),
                   ],

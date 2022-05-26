@@ -6,6 +6,10 @@ import 'package:segundo_muelle/app/data/models/order_plate_model.dart';
 import 'package:segundo_muelle/app/data/models/plate_model.dart';
 import 'package:segundo_muelle/app/data/models/table_model.dart';
 import 'package:segundo_muelle/app/data/models/user_model.dart';
+import 'package:segundo_muelle/app/data/repository/order_repository.dart';
+import 'package:segundo_muelle/app/data/repository/plate_repository.dart';
+import 'package:segundo_muelle/app/data/repository/table_repository.dart';
+import 'package:segundo_muelle/app/data/repository/user_repository.dart';
 
 class MainController extends GetxController {
   late Box<TableModel> tableBox;
@@ -27,6 +31,14 @@ class MainController extends GetxController {
     super.onInit();
     registerAdapters();
     await registerBoxes();
+    inject();
+  }
+
+  inject() {
+    Get.put(TableRepository());
+    Get.put(PlateRepository());
+    Get.put(OrderRepository());
+    Get.put(UserRepository());
   }
 
   registerAdapters() {

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:segundo_muelle/app/data/enums/category_enum.dart';
 import 'package:segundo_muelle/app/data/models/plate_model.dart';
+import 'package:segundo_muelle/app/data/repository/plate_repository.dart';
 import 'package:segundo_muelle/core/utils/alert_utils.dart';
 import 'package:segundo_muelle/core/utils/category_utils.dart';
-import 'package:segundo_muelle/main_controller.dart';
 
 class PlateCrudController extends GetxController {
-  final MainController _mainController = Get.find();
+  final PlateRepository _plateRepository = Get.find();
   List<PlateModel> plates = <PlateModel>[].obs;
   final formKey = GlobalKey<FormState>();
 
@@ -39,7 +39,7 @@ class PlateCrudController extends GetxController {
 
   @override
   void onInit() {
-    plates.addAll(_mainController.plateBox.values.toList());
+    setPlates();
     addCategoryItems();
     selectAllCategories();
     update();
@@ -49,65 +49,71 @@ class PlateCrudController extends GetxController {
   selectAllCategories() {
     selectedCategories.clear();
     selectedCategories.addAll(CategoryEnum.values);
+    update();
   }
 
   addCategoryItems() {
     categoryDropdownMenuItems = <DropdownMenuItem<CategoryEnum>>[];
     for (var category in CategoryEnum.values) {
-      categoryDropdownMenuItems.add(DropdownMenuItem(
+      categoryDropdownMenuItems.add(
+        DropdownMenuItem(
           value: category,
-          child: Text(CategoryUtils.getCategoryTypeString(category))));
+          child: Text(
+            CategoryUtils.getCategoryTypeString(category),
+          ),
+        ),
+      );
     }
   }
 
   onAcceptAddPlate() {
     if (formKey.currentState!.validate()) {
-      _mainController.plateBox.add(PlateModel(
+      _plateRepository.registerPlate(PlateModel(
           name: addNameTextController.text,
           price: double.parse(addPriceTextController.text),
           description: '',
           code: addCodeTextController.text,
           category: selectedCategory.value));
       formKey.currentState?.reset();
-      plates.clear();
-      plates.addAll(_mainController.plateBox.values.toList());
+      setPlates();
       selectAllCategories();
-      update();
       Get.back();
       AlertUtils.showSuccess('Plato agregado correctamente');
     }
   }
 
-  onAcceptDelete(int index) async {
-    _mainController.plateBox.deleteAt(index);
-    plates.clear();
-    plates.addAll(_mainController.plateBox.values.toList());
-    update();
+  onAcceptDelete(String key) async {
+    _plateRepository.deletePlate(key);
+    setPlates();
     Get.back();
     AlertUtils.showSuccess('El plato fue eliminado correctamente');
   }
 
   onCancelDelete() {
-    plates.clear();
-    plates.addAll(_mainController.plateBox.values.toList());
-    update();
+    setPlates();
     Get.back();
   }
 
-  onAcceptEditPlate(int index) {
-    _mainController.plateBox.putAt(
-        index,
-        PlateModel(
-            name: editNameTextController.text,
-            price: double.parse(editPriceTextController.text),
-            description: '',
-            code: editCodeTextController.text,
-            category: selectedCategory.value));
+  onAcceptEditPlate(String key) {
+    _plateRepository.updatePlate(
+      key,
+      PlateModel(
+          name: editNameTextController.text,
+          price: double.parse(editPriceTextController.text),
+          description: '',
+          code: editCodeTextController.text,
+          category: selectedCategory.value),
+    );
     formKey.currentState?.reset();
-    plates.clear();
-    plates.addAll(_mainController.plateBox.values.toList());
-    update();
+    setPlates();
     Get.back();
     AlertUtils.showSuccess('El plato se editó correctamente');
+  }
+
+  setPlates() {
+    plates.clear();
+    plates.addAll(_plateRepository.getPlates());
+    plates.sort((a, b) => a.code.compareTo(b.code));
+    update();
   }
 }
