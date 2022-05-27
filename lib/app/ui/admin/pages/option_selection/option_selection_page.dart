@@ -5,9 +5,7 @@ import 'package:segundo_muelle/app/ui/admin/pages/plate_crud/plate_crud_page.dar
 import 'package:segundo_muelle/app/ui/admin/pages/table_crud/table_crud_page.dart';
 import 'package:segundo_muelle/app/ui/admin/pages/user_crud/user_crud_page.dart';
 import 'package:segundo_muelle/app/ui/login/pages/login_page.dart';
-
-mport 'package:segundo_muelle/main_controller.dart
-';
+import 'package:segundo_muelle/main_controller.dart';
 
 class OptionSelectionPage extends StatefulWidget {
   const OptionSelectionPage({Key? key}) : super(key: key);
@@ -51,9 +49,10 @@ class _OptionSelectionPageState extends State<OptionSelectionPage> {
     );
   }
 
-  _buildItem({required IconData iconData,
-    required String title,
-    required Function onTap}) {
+  _buildItem(
+      {required IconData iconData,
+      required String title,
+      required Function onTap}) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(6),
       child: Material(
